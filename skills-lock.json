@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "start-core": {
+      "source": "tanstack/router",
+      "sourceType": "github",
+      "computedHash": "406e9b1359fb9ed0c25257bb9d7550042edb892a3c6dffd563d4532d00046ee9"
+    }
+  }
+}
