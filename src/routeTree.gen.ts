@@ -12,7 +12,18 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
-import { Route as DemoDrizzleRouteImport } from './routes/demo/drizzle'
+import { Route as ApiUsersRouteImport } from './routes/api/users'
+import { Route as ApiShoppingListRouteImport } from './routes/api/shopping-list'
+import { Route as ApiRecipesRouteImport } from './routes/api/recipes'
+import { Route as ApiMealPlanRouteImport } from './routes/api/meal-plan'
+import { Route as ApiRecipesFetchRouteImport } from './routes/api/recipes/fetch'
+import { Route as ApiRecipesIdRouteImport } from './routes/api/recipes/$id'
+import { Route as ApiMealPlanSettingsRouteImport } from './routes/api/meal-plan/settings'
+import { Route as ApiMealPlanMealsRouteImport } from './routes/api/meal-plan/meals'
+import { Route as ApiIngredientsIdRouteImport } from './routes/api/ingredients/$id'
+import { Route as ApiShoppingListItemsIdRouteImport } from './routes/api/shopping-list/items/$id'
+import { Route as ApiMealPlanMealsMealIdRouteImport } from './routes/api/meal-plan/meals/$mealId'
+import { Route as ApiIngredientsIdSubstitutionRouteImport } from './routes/api/ingredients/$id/substitution'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -29,44 +40,183 @@ const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
   path: '/demo/tanstack-query',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoDrizzleRoute = DemoDrizzleRouteImport.update({
-  id: '/demo/drizzle',
-  path: '/demo/drizzle',
+const ApiUsersRoute = ApiUsersRouteImport.update({
+  id: '/api/users',
+  path: '/api/users',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiShoppingListRoute = ApiShoppingListRouteImport.update({
+  id: '/api/shopping-list',
+  path: '/api/shopping-list',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRecipesRoute = ApiRecipesRouteImport.update({
+  id: '/api/recipes',
+  path: '/api/recipes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMealPlanRoute = ApiMealPlanRouteImport.update({
+  id: '/api/meal-plan',
+  path: '/api/meal-plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRecipesFetchRoute = ApiRecipesFetchRouteImport.update({
+  id: '/fetch',
+  path: '/fetch',
+  getParentRoute: () => ApiRecipesRoute,
+} as any)
+const ApiRecipesIdRoute = ApiRecipesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiRecipesRoute,
+} as any)
+const ApiMealPlanSettingsRoute = ApiMealPlanSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => ApiMealPlanRoute,
+} as any)
+const ApiMealPlanMealsRoute = ApiMealPlanMealsRouteImport.update({
+  id: '/meals',
+  path: '/meals',
+  getParentRoute: () => ApiMealPlanRoute,
+} as any)
+const ApiIngredientsIdRoute = ApiIngredientsIdRouteImport.update({
+  id: '/api/ingredients/$id',
+  path: '/api/ingredients/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiShoppingListItemsIdRoute = ApiShoppingListItemsIdRouteImport.update({
+  id: '/items/$id',
+  path: '/items/$id',
+  getParentRoute: () => ApiShoppingListRoute,
+} as any)
+const ApiMealPlanMealsMealIdRoute = ApiMealPlanMealsMealIdRouteImport.update({
+  id: '/$mealId',
+  path: '/$mealId',
+  getParentRoute: () => ApiMealPlanMealsRoute,
+} as any)
+const ApiIngredientsIdSubstitutionRoute =
+  ApiIngredientsIdSubstitutionRouteImport.update({
+    id: '/substitution',
+    path: '/substitution',
+    getParentRoute: () => ApiIngredientsIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/demo/drizzle': typeof DemoDrizzleRoute
+  '/api/meal-plan': typeof ApiMealPlanRouteWithChildren
+  '/api/recipes': typeof ApiRecipesRouteWithChildren
+  '/api/shopping-list': typeof ApiShoppingListRouteWithChildren
+  '/api/users': typeof ApiUsersRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/api/ingredients/$id': typeof ApiIngredientsIdRouteWithChildren
+  '/api/meal-plan/meals': typeof ApiMealPlanMealsRouteWithChildren
+  '/api/meal-plan/settings': typeof ApiMealPlanSettingsRoute
+  '/api/recipes/$id': typeof ApiRecipesIdRoute
+  '/api/recipes/fetch': typeof ApiRecipesFetchRoute
+  '/api/ingredients/$id/substitution': typeof ApiIngredientsIdSubstitutionRoute
+  '/api/meal-plan/meals/$mealId': typeof ApiMealPlanMealsMealIdRoute
+  '/api/shopping-list/items/$id': typeof ApiShoppingListItemsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/demo/drizzle': typeof DemoDrizzleRoute
+  '/api/meal-plan': typeof ApiMealPlanRouteWithChildren
+  '/api/recipes': typeof ApiRecipesRouteWithChildren
+  '/api/shopping-list': typeof ApiShoppingListRouteWithChildren
+  '/api/users': typeof ApiUsersRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/api/ingredients/$id': typeof ApiIngredientsIdRouteWithChildren
+  '/api/meal-plan/meals': typeof ApiMealPlanMealsRouteWithChildren
+  '/api/meal-plan/settings': typeof ApiMealPlanSettingsRoute
+  '/api/recipes/$id': typeof ApiRecipesIdRoute
+  '/api/recipes/fetch': typeof ApiRecipesFetchRoute
+  '/api/ingredients/$id/substitution': typeof ApiIngredientsIdSubstitutionRoute
+  '/api/meal-plan/meals/$mealId': typeof ApiMealPlanMealsMealIdRoute
+  '/api/shopping-list/items/$id': typeof ApiShoppingListItemsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/demo/drizzle': typeof DemoDrizzleRoute
+  '/api/meal-plan': typeof ApiMealPlanRouteWithChildren
+  '/api/recipes': typeof ApiRecipesRouteWithChildren
+  '/api/shopping-list': typeof ApiShoppingListRouteWithChildren
+  '/api/users': typeof ApiUsersRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/api/ingredients/$id': typeof ApiIngredientsIdRouteWithChildren
+  '/api/meal-plan/meals': typeof ApiMealPlanMealsRouteWithChildren
+  '/api/meal-plan/settings': typeof ApiMealPlanSettingsRoute
+  '/api/recipes/$id': typeof ApiRecipesIdRoute
+  '/api/recipes/fetch': typeof ApiRecipesFetchRoute
+  '/api/ingredients/$id/substitution': typeof ApiIngredientsIdSubstitutionRoute
+  '/api/meal-plan/meals/$mealId': typeof ApiMealPlanMealsMealIdRoute
+  '/api/shopping-list/items/$id': typeof ApiShoppingListItemsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/demo/drizzle' | '/demo/tanstack-query'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/api/meal-plan'
+    | '/api/recipes'
+    | '/api/shopping-list'
+    | '/api/users'
+    | '/demo/tanstack-query'
+    | '/api/ingredients/$id'
+    | '/api/meal-plan/meals'
+    | '/api/meal-plan/settings'
+    | '/api/recipes/$id'
+    | '/api/recipes/fetch'
+    | '/api/ingredients/$id/substitution'
+    | '/api/meal-plan/meals/$mealId'
+    | '/api/shopping-list/items/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/demo/drizzle' | '/demo/tanstack-query'
-  id: '__root__' | '/' | '/about' | '/demo/drizzle' | '/demo/tanstack-query'
+  to:
+    | '/'
+    | '/about'
+    | '/api/meal-plan'
+    | '/api/recipes'
+    | '/api/shopping-list'
+    | '/api/users'
+    | '/demo/tanstack-query'
+    | '/api/ingredients/$id'
+    | '/api/meal-plan/meals'
+    | '/api/meal-plan/settings'
+    | '/api/recipes/$id'
+    | '/api/recipes/fetch'
+    | '/api/ingredients/$id/substitution'
+    | '/api/meal-plan/meals/$mealId'
+    | '/api/shopping-list/items/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/api/meal-plan'
+    | '/api/recipes'
+    | '/api/shopping-list'
+    | '/api/users'
+    | '/demo/tanstack-query'
+    | '/api/ingredients/$id'
+    | '/api/meal-plan/meals'
+    | '/api/meal-plan/settings'
+    | '/api/recipes/$id'
+    | '/api/recipes/fetch'
+    | '/api/ingredients/$id/substitution'
+    | '/api/meal-plan/meals/$mealId'
+    | '/api/shopping-list/items/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  DemoDrizzleRoute: typeof DemoDrizzleRoute
+  ApiMealPlanRoute: typeof ApiMealPlanRouteWithChildren
+  ApiRecipesRoute: typeof ApiRecipesRouteWithChildren
+  ApiShoppingListRoute: typeof ApiShoppingListRouteWithChildren
+  ApiUsersRoute: typeof ApiUsersRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
+  ApiIngredientsIdRoute: typeof ApiIngredientsIdRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -92,21 +242,164 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoTanstackQueryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/drizzle': {
-      id: '/demo/drizzle'
-      path: '/demo/drizzle'
-      fullPath: '/demo/drizzle'
-      preLoaderRoute: typeof DemoDrizzleRouteImport
+    '/api/users': {
+      id: '/api/users'
+      path: '/api/users'
+      fullPath: '/api/users'
+      preLoaderRoute: typeof ApiUsersRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/shopping-list': {
+      id: '/api/shopping-list'
+      path: '/api/shopping-list'
+      fullPath: '/api/shopping-list'
+      preLoaderRoute: typeof ApiShoppingListRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/recipes': {
+      id: '/api/recipes'
+      path: '/api/recipes'
+      fullPath: '/api/recipes'
+      preLoaderRoute: typeof ApiRecipesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/meal-plan': {
+      id: '/api/meal-plan'
+      path: '/api/meal-plan'
+      fullPath: '/api/meal-plan'
+      preLoaderRoute: typeof ApiMealPlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/recipes/fetch': {
+      id: '/api/recipes/fetch'
+      path: '/fetch'
+      fullPath: '/api/recipes/fetch'
+      preLoaderRoute: typeof ApiRecipesFetchRouteImport
+      parentRoute: typeof ApiRecipesRoute
+    }
+    '/api/recipes/$id': {
+      id: '/api/recipes/$id'
+      path: '/$id'
+      fullPath: '/api/recipes/$id'
+      preLoaderRoute: typeof ApiRecipesIdRouteImport
+      parentRoute: typeof ApiRecipesRoute
+    }
+    '/api/meal-plan/settings': {
+      id: '/api/meal-plan/settings'
+      path: '/settings'
+      fullPath: '/api/meal-plan/settings'
+      preLoaderRoute: typeof ApiMealPlanSettingsRouteImport
+      parentRoute: typeof ApiMealPlanRoute
+    }
+    '/api/meal-plan/meals': {
+      id: '/api/meal-plan/meals'
+      path: '/meals'
+      fullPath: '/api/meal-plan/meals'
+      preLoaderRoute: typeof ApiMealPlanMealsRouteImport
+      parentRoute: typeof ApiMealPlanRoute
+    }
+    '/api/ingredients/$id': {
+      id: '/api/ingredients/$id'
+      path: '/api/ingredients/$id'
+      fullPath: '/api/ingredients/$id'
+      preLoaderRoute: typeof ApiIngredientsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/shopping-list/items/$id': {
+      id: '/api/shopping-list/items/$id'
+      path: '/items/$id'
+      fullPath: '/api/shopping-list/items/$id'
+      preLoaderRoute: typeof ApiShoppingListItemsIdRouteImport
+      parentRoute: typeof ApiShoppingListRoute
+    }
+    '/api/meal-plan/meals/$mealId': {
+      id: '/api/meal-plan/meals/$mealId'
+      path: '/$mealId'
+      fullPath: '/api/meal-plan/meals/$mealId'
+      preLoaderRoute: typeof ApiMealPlanMealsMealIdRouteImport
+      parentRoute: typeof ApiMealPlanMealsRoute
+    }
+    '/api/ingredients/$id/substitution': {
+      id: '/api/ingredients/$id/substitution'
+      path: '/substitution'
+      fullPath: '/api/ingredients/$id/substitution'
+      preLoaderRoute: typeof ApiIngredientsIdSubstitutionRouteImport
+      parentRoute: typeof ApiIngredientsIdRoute
     }
   }
 }
 
+interface ApiMealPlanMealsRouteChildren {
+  ApiMealPlanMealsMealIdRoute: typeof ApiMealPlanMealsMealIdRoute
+}
+
+const ApiMealPlanMealsRouteChildren: ApiMealPlanMealsRouteChildren = {
+  ApiMealPlanMealsMealIdRoute: ApiMealPlanMealsMealIdRoute,
+}
+
+const ApiMealPlanMealsRouteWithChildren =
+  ApiMealPlanMealsRoute._addFileChildren(ApiMealPlanMealsRouteChildren)
+
+interface ApiMealPlanRouteChildren {
+  ApiMealPlanMealsRoute: typeof ApiMealPlanMealsRouteWithChildren
+  ApiMealPlanSettingsRoute: typeof ApiMealPlanSettingsRoute
+}
+
+const ApiMealPlanRouteChildren: ApiMealPlanRouteChildren = {
+  ApiMealPlanMealsRoute: ApiMealPlanMealsRouteWithChildren,
+  ApiMealPlanSettingsRoute: ApiMealPlanSettingsRoute,
+}
+
+const ApiMealPlanRouteWithChildren = ApiMealPlanRoute._addFileChildren(
+  ApiMealPlanRouteChildren,
+)
+
+interface ApiRecipesRouteChildren {
+  ApiRecipesIdRoute: typeof ApiRecipesIdRoute
+  ApiRecipesFetchRoute: typeof ApiRecipesFetchRoute
+}
+
+const ApiRecipesRouteChildren: ApiRecipesRouteChildren = {
+  ApiRecipesIdRoute: ApiRecipesIdRoute,
+  ApiRecipesFetchRoute: ApiRecipesFetchRoute,
+}
+
+const ApiRecipesRouteWithChildren = ApiRecipesRoute._addFileChildren(
+  ApiRecipesRouteChildren,
+)
+
+interface ApiShoppingListRouteChildren {
+  ApiShoppingListItemsIdRoute: typeof ApiShoppingListItemsIdRoute
+}
+
+const ApiShoppingListRouteChildren: ApiShoppingListRouteChildren = {
+  ApiShoppingListItemsIdRoute: ApiShoppingListItemsIdRoute,
+}
+
+const ApiShoppingListRouteWithChildren = ApiShoppingListRoute._addFileChildren(
+  ApiShoppingListRouteChildren,
+)
+
+interface ApiIngredientsIdRouteChildren {
+  ApiIngredientsIdSubstitutionRoute: typeof ApiIngredientsIdSubstitutionRoute
+}
+
+const ApiIngredientsIdRouteChildren: ApiIngredientsIdRouteChildren = {
+  ApiIngredientsIdSubstitutionRoute: ApiIngredientsIdSubstitutionRoute,
+}
+
+const ApiIngredientsIdRouteWithChildren =
+  ApiIngredientsIdRoute._addFileChildren(ApiIngredientsIdRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  DemoDrizzleRoute: DemoDrizzleRoute,
+  ApiMealPlanRoute: ApiMealPlanRouteWithChildren,
+  ApiRecipesRoute: ApiRecipesRouteWithChildren,
+  ApiShoppingListRoute: ApiShoppingListRouteWithChildren,
+  ApiUsersRoute: ApiUsersRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
+  ApiIngredientsIdRoute: ApiIngredientsIdRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
