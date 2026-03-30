@@ -21,14 +21,14 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Local database configuration (from .env.example)
-LOCAL_DB_USER="anise_user"
-LOCAL_DB_NAME="anise_db"
-LOCAL_CONTAINER="anise_postgres"
+LOCAL_DB_USER="heirloom_user"
+LOCAL_DB_NAME="heirloom_db"
+LOCAL_CONTAINER="heirloom_postgres"
 
 # Temporary dump file
-DUMP_FILE="/tmp/anise_prod_dump_$(date +%Y%m%d_%H%M%S).sql"
+DUMP_FILE="/tmp/heirloom_prod_dump_$(date +%Y%m%d_%H%M%S).sql"
 
-echo -e "${YELLOW}=== Anise Database Sync Script ===${NC}"
+echo -e "${YELLOW}=== Heirloom Database Sync Script ===${NC}"
 echo "This script will copy production data to your local database."
 echo ""
 echo -e "${RED}WARNING: This will DESTROY all data in your local database!${NC}"
