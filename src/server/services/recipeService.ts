@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { getDb } from '#/server/db';
-import { recipes } from '#/server/db/schema';
+import { recipeIngredientSubstitutions, recipeIngredients, recipes } from '#/server/db/schema';
 
 export type Recipe = {
   id: number;
@@ -92,6 +92,36 @@ class RecipeService {
       .where(eq(recipes.id, id))
       .returning();
     return result.length > 0;
+  }
+
+  async markIngredientDoNotUse(recipeIngredientId: number): Promise<boolean> {
+    const db = await getDb();
+    const result = await db
+      .update(recipeIngredients)
+      .set({ doNotUse: true })
+      .where(eq(recipeIngredients.id, recipeIngredientId))
+      .returning();
+    return result.length > 0;
+  }
+
+  async upsertIngredientSubstitution(
+    recipeIngredientId: number,
+    ingredient: string,
+  ): Promise<void> {
+    const db = await getDb();
+    const existing = await db.query.recipeIngredientSubstitutions.findFirst({
+      where: (s, { eq }) => eq(s.ingredientId, recipeIngredientId),
+    });
+    if (existing) {
+      await db
+        .update(recipeIngredientSubstitutions)
+        .set({ ingredient })
+        .where(eq(recipeIngredientSubstitutions.id, existing.id));
+    } else {
+      await db
+        .insert(recipeIngredientSubstitutions)
+        .values({ ingredientId: recipeIngredientId, ingredient });
+    }
   }
 
   async softDeleteRecipe(id: number): Promise<boolean> {
