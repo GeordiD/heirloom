@@ -1,6 +1,6 @@
-import { eq } from 'drizzle-orm';
 import { getDb } from '#/server/db';
 import { recipeIngredientSubstitutions, recipeIngredients, recipes } from '#/server/db/schema';
+import { eq } from 'drizzle-orm';
 
 export type Recipe = {
   id: number;
@@ -11,6 +11,10 @@ export type Recipe = {
   servings: string | null;
   cuisine: string | null;
 };
+
+export type RecipeDetail = NonNullable<
+  Awaited<ReturnType<typeof RecipeService.prototype.getRecipeById>>
+>;
 
 class RecipeService {
   async getAllRecipes(): Promise<Recipe[]> {
