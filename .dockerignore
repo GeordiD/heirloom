@@ -1,0 +1,11 @@
+node_modules
+.output
+.nitro
+.tanstack
+.vite
+.vite-hooks
+.vscode
+.env*
+*.local
+dist
+dist-ssr
