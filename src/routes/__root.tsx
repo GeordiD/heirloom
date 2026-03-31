@@ -1,6 +1,6 @@
+import { TanStackDevtools } from '@tanstack/react-devtools';
 import { HeadContent, Scripts, createRootRouteWithContext } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
-import { TanStackDevtools } from '@tanstack/react-devtools';
 import NavBar from '../components/NavBar';
 
 import TanStackQueryProvider from '../integrations/tanstack-query/root-provider';
