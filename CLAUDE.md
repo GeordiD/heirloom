@@ -1,3 +1,11 @@
+# Heirloom
+
+Port of the anise Nuxt app to React/TanStack Start.
+
+## Documentation
+
+- [Color System](./docs/color-system.md) — Semantic color utilities and dark mode guidelines
+
 <!--VITE PLUS START-->
 
 # Using Vite+, the Unified Toolchain for the Web

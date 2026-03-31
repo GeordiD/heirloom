@@ -31,11 +31,11 @@ function RecipesPage() {
   return (
     <main className="mx-auto max-w-4xl px-4 py-8">
       <div className="mb-8 flex items-center gap-4">
-        <h1 className="display-title text-3xl font-bold text-[var(--sea-ink)]">Recipes</h1>
+        <h1 className="display-title text-3xl font-bold text-foreground">Recipes</h1>
         <div className="relative max-w-sm flex-1">
           <Search
             size={16}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--sea-ink-soft)]"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
           />
           <Input
             placeholder="Search recipes..."
@@ -47,9 +47,9 @@ function RecipesPage() {
       </div>
 
       {recipes.length === 0 ? (
-        <div className="py-12 text-center text-[var(--sea-ink-soft)]">No recipes yet.</div>
+        <div className="py-12 text-center text-muted-foreground">No recipes yet.</div>
       ) : filtered.length === 0 ? (
-        <div className="py-12 text-center text-[var(--sea-ink-soft)]">
+        <div className="py-12 text-center text-muted-foreground">
           No recipes match &ldquo;{search}&rdquo;.
         </div>
       ) : (
