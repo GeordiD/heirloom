@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   postgres:
@@ -9,11 +9,11 @@ services:
       POSTGRES_USER: heirloom_user
       POSTGRES_PASSWORD: heirloom_password
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U heirloom_user -d heirloom_db"]
+      test: ['CMD-SHELL', 'pg_isready -U heirloom_user -d heirloom_db']
       interval: 10s
       timeout: 5s
       retries: 5

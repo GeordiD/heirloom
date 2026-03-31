@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const recipeIdParamSchema = z.object({
   id: z.string().transform((val, ctx) => {
@@ -6,7 +6,7 @@ export const recipeIdParamSchema = z.object({
     if (isNaN(parsed) || parsed < 1) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "ID must be a positive integer",
+        message: 'ID must be a positive integer',
       });
       return z.NEVER;
     }

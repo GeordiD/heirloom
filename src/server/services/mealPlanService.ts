@@ -1,16 +1,16 @@
-import { and, eq } from "drizzle-orm";
-import { getDb } from "#/server/db";
-import { mealPlanDays, mealPlanMeals, mealPlans } from "#/server/db/schema";
+import { and, eq } from 'drizzle-orm';
+import { getDb } from '#/server/db';
+import { mealPlanDays, mealPlanMeals, mealPlans } from '#/server/db/schema';
 
-export type MealType = "lunch" | "dinner";
+export type MealType = 'lunch' | 'dinner';
 export type DayOfWeek =
-  | "sunday"
-  | "monday"
-  | "tuesday"
-  | "wednesday"
-  | "thursday"
-  | "friday"
-  | "saturday";
+  | 'sunday'
+  | 'monday'
+  | 'tuesday'
+  | 'wednesday'
+  | 'thursday'
+  | 'friday'
+  | 'saturday';
 
 export type MealPlanMeal = {
   id: number;
@@ -35,13 +35,13 @@ export type MealPlan = {
 };
 
 const daysOfWeek: DayOfWeek[] = [
-  "sunday",
-  "monday",
-  "tuesday",
-  "wednesday",
-  "thursday",
-  "friday",
-  "saturday",
+  'sunday',
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
 ];
 
 const daysMap: Record<DayOfWeek, number> = {
@@ -76,7 +76,7 @@ class MealPlanService {
     });
 
     if (!mealPlan) {
-      mealPlan = await this.createMealPlan("sunday");
+      mealPlan = await this.createMealPlan('sunday');
     }
 
     return {
@@ -87,7 +87,7 @@ class MealPlanService {
         dayOfWeek: day.dayOfWeek as DayOfWeek,
         date: day.date,
         lunch: day.meals
-          .filter((m) => m.mealType === "lunch")
+          .filter((m) => m.mealType === 'lunch')
           .map((m) => ({
             id: m.id,
             recipeId: m.recipeId,
@@ -96,7 +96,7 @@ class MealPlanService {
             sortOrder: m.sortOrder,
           })),
         dinner: day.meals
-          .filter((m) => m.mealType === "dinner")
+          .filter((m) => m.mealType === 'dinner')
           .map((m) => ({
             id: m.id,
             recipeId: m.recipeId,
@@ -116,7 +116,7 @@ class MealPlanService {
       .values({ userId: this.DEFAULT_USER_ID, weekStartDay })
       .returning();
 
-    if (!newMealPlan) throw new Error("Failed to create meal plan");
+    if (!newMealPlan) throw new Error('Failed to create meal plan');
 
     const weekStartIndex = daysOfWeek.indexOf(weekStartDay);
     const orderedDays = [
@@ -139,7 +139,7 @@ class MealPlanService {
       return {
         mealPlanId: newMealPlan.id,
         dayOfWeek: day,
-        date: date.toISOString().split("T")[0]!,
+        date: date.toISOString().split('T')[0]!,
       };
     });
 
@@ -160,7 +160,7 @@ class MealPlanService {
       },
     });
 
-    if (!completeMealPlan) throw new Error("Failed to create meal plan");
+    if (!completeMealPlan) throw new Error('Failed to create meal plan');
 
     return completeMealPlan;
   }
@@ -184,8 +184,8 @@ class MealPlanService {
       .values({
         dayId,
         mealType,
-        recipeId: "recipeId" in meal ? meal.recipeId : null,
-        customText: "customText" in meal ? meal.customText : null,
+        recipeId: 'recipeId' in meal ? meal.recipeId : null,
+        customText: 'customText' in meal ? meal.customText : null,
         sortOrder: maxSortOrder + 1,
       })
       .returning();
@@ -195,7 +195,7 @@ class MealPlanService {
       with: { recipe: true },
     });
 
-    if (!mealWithRecipe) throw new Error("Failed to add meal");
+    if (!mealWithRecipe) throw new Error('Failed to add meal');
 
     return {
       id: mealWithRecipe.id,
@@ -219,7 +219,7 @@ class MealPlanService {
       with: { days: true },
     });
 
-    if (!mealPlan) throw new Error("No meal plan found");
+    if (!mealPlan) throw new Error('No meal plan found');
 
     for (const day of mealPlan.days) {
       await db.delete(mealPlanMeals).where(eq(mealPlanMeals.dayId, day.id));
@@ -238,7 +238,7 @@ class MealPlanService {
       where: eq(mealPlans.userId, this.DEFAULT_USER_ID),
     });
 
-    if (!mealPlan) throw new Error("No meal plan found");
+    if (!mealPlan) throw new Error('No meal plan found');
 
     await db
       .update(mealPlans)
@@ -268,7 +268,7 @@ class MealPlanService {
       return {
         mealPlanId: mealPlan.id,
         dayOfWeek: day,
-        date: date.toISOString().split("T")[0]!,
+        date: date.toISOString().split('T')[0]!,
       };
     });
 

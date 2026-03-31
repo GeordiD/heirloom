@@ -8,7 +8,7 @@ description: >-
   enforcement, fetch override precedence.
 type: sub-skill
 library: tanstack-start
-library_version: "1.166.2"
+library_version: '1.166.2'
 requires:
   - start-core
   - start-core/server-functions
@@ -41,10 +41,10 @@ Runs on ALL server requests (SSR, server routes, server functions):
 
 ```tsx
 // Use @tanstack/<framework>-start for your framework (react, solid, vue)
-import { createMiddleware } from "@tanstack/react-start";
+import { createMiddleware } from '@tanstack/react-start';
 
 const loggingMiddleware = createMiddleware().server(async ({ next, context, request }) => {
-  console.log("Request:", request.url);
+  console.log('Request:', request.url);
   const result = await next();
   return result;
 });
@@ -56,9 +56,9 @@ Has both client and server phases:
 
 ```tsx
 // Use @tanstack/<framework>-start for your framework (react, solid, vue)
-import { createMiddleware } from "@tanstack/react-start";
+import { createMiddleware } from '@tanstack/react-start';
 
-const authMiddleware = createMiddleware({ type: "function" })
+const authMiddleware = createMiddleware({ type: 'function' })
   .client(async ({ next }) => {
     // Runs on client BEFORE the RPC call
     const result = await next();
@@ -77,7 +77,7 @@ const authMiddleware = createMiddleware({ type: "function" })
 
 ```tsx
 // Use @tanstack/<framework>-start for your framework (react, solid, vue)
-import { createServerFn } from "@tanstack/react-start";
+import { createServerFn } from '@tanstack/react-start';
 
 const fn = createServerFn()
   .middleware([authMiddleware])
@@ -94,7 +94,7 @@ Pass context down the middleware chain:
 ```tsx
 const authMiddleware = createMiddleware().server(async ({ next, request }) => {
   const session = await getSession(request.headers);
-  if (!session) throw new Error("Unauthorized");
+  if (!session) throw new Error('Unauthorized');
 
   return next({
     context: { session },
@@ -104,7 +104,7 @@ const authMiddleware = createMiddleware().server(async ({ next, request }) => {
 const roleMiddleware = createMiddleware()
   .middleware([authMiddleware])
   .server(async ({ next, context }) => {
-    console.log("Session:", context.session); // typed!
+    console.log('Session:', context.session); // typed!
     return next();
   });
 ```
@@ -114,7 +114,7 @@ const roleMiddleware = createMiddleware()
 ### Client → Server (sendContext)
 
 ```tsx
-const workspaceMiddleware = createMiddleware({ type: "function" })
+const workspaceMiddleware = createMiddleware({ type: 'function' })
   .client(async ({ next, context }) => {
     return next({
       sendContext: {
@@ -124,7 +124,7 @@ const workspaceMiddleware = createMiddleware({ type: "function" })
   })
   .server(async ({ next, context }) => {
     // workspaceId available here, but VALIDATE IT
-    console.log("Workspace:", context.workspaceId);
+    console.log('Workspace:', context.workspaceId);
     return next();
   });
 ```
@@ -132,7 +132,7 @@ const workspaceMiddleware = createMiddleware({ type: "function" })
 ### Server → Client (sendContext in server)
 
 ```tsx
-const serverTimer = createMiddleware({ type: "function" }).server(async ({ next }) => {
+const serverTimer = createMiddleware({ type: 'function' }).server(async ({ next }) => {
   return next({
     sendContext: {
       timeFromServer: new Date(),
@@ -140,11 +140,11 @@ const serverTimer = createMiddleware({ type: "function" }).server(async ({ next 
   });
 });
 
-const clientLogger = createMiddleware({ type: "function" })
+const clientLogger = createMiddleware({ type: 'function' })
   .middleware([serverTimer])
   .client(async ({ next }) => {
     const result = await next();
-    console.log("Server time:", result.context.timeFromServer);
+    console.log('Server time:', result.context.timeFromServer);
     return result;
   });
 ```
@@ -152,13 +152,13 @@ const clientLogger = createMiddleware({ type: "function" })
 ## Input Validation in Middleware
 
 ```tsx
-import { z } from "zod";
-import { zodValidator } from "@tanstack/zod-adapter";
+import { z } from 'zod';
+import { zodValidator } from '@tanstack/zod-adapter';
 
-const workspaceMiddleware = createMiddleware({ type: "function" })
+const workspaceMiddleware = createMiddleware({ type: 'function' })
   .inputValidator(zodValidator(z.object({ workspaceId: z.string() })))
   .server(async ({ next, data }) => {
-    console.log("Workspace:", data.workspaceId);
+    console.log('Workspace:', data.workspaceId);
     return next();
   });
 ```
@@ -170,14 +170,14 @@ Create `src/start.ts` to configure global middleware:
 ```tsx
 // src/start.ts
 // Use @tanstack/<framework>-start for your framework (react, solid, vue)
-import { createStart, createMiddleware } from "@tanstack/react-start";
+import { createStart, createMiddleware } from '@tanstack/react-start';
 
 const requestLogger = createMiddleware().server(async ({ next, request }) => {
   console.log(`${request.method} ${request.url}`);
   return next();
 });
 
-const functionAuth = createMiddleware({ type: "function" }).server(async ({ next }) => {
+const functionAuth = createMiddleware({ type: 'function' }).server(async ({ next }) => {
   // runs for every server function
   return next();
 });
@@ -193,7 +193,7 @@ export const startInstance = createStart(() => ({
 ### All handlers in a route
 
 ```tsx
-export const Route = createFileRoute("/api/users")({
+export const Route = createFileRoute('/api/users')({
   server: {
     middleware: [authMiddleware],
     handlers: {
@@ -209,7 +209,7 @@ export const Route = createFileRoute("/api/users")({
 ### Specific handlers only
 
 ```tsx
-export const Route = createFileRoute("/api/users")({
+export const Route = createFileRoute('/api/users')({
   server: {
     handlers: ({ createHandlers }) =>
       createHandlers({
@@ -232,27 +232,27 @@ Create parameterized middleware for reusable patterns like authorization:
 ```tsx
 const authMiddleware = createMiddleware().server(async ({ next, request }) => {
   const session = await auth.getSession({ headers: request.headers });
-  if (!session) throw new Error("Unauthorized");
+  if (!session) throw new Error('Unauthorized');
   return next({ context: { session } });
 });
 
 type Permissions = Record<string, string[]>;
 
 function authorizationMiddleware(permissions: Permissions) {
-  return createMiddleware({ type: "function" })
+  return createMiddleware({ type: 'function' })
     .middleware([authMiddleware])
     .server(async ({ next, context }) => {
       const granted = await auth.hasPermission(context.session, permissions);
-      if (!granted) throw new Error("Forbidden");
+      if (!granted) throw new Error('Forbidden');
       return next();
     });
 }
 
 // Usage
 const getClients = createServerFn()
-  .middleware([authorizationMiddleware({ client: ["read"] })])
+  .middleware([authorizationMiddleware({ client: ['read'] })])
   .handler(async () => {
-    return { message: "The user can read clients." };
+    return { message: 'The user can read clients.' };
   });
 ```
 
@@ -261,7 +261,7 @@ const getClients = createServerFn()
 ### Setting headers from client middleware
 
 ```tsx
-const authMiddleware = createMiddleware({ type: "function" }).client(async ({ next }) => {
+const authMiddleware = createMiddleware({ type: 'function' }).client(async ({ next }) => {
   return next({
     headers: { Authorization: `Bearer ${getToken()}` },
   });
@@ -274,11 +274,11 @@ Headers merge across middleware. Later middleware overrides earlier. Call-site h
 
 ```tsx
 // Use @tanstack/<framework>-start for your framework (react, solid, vue)
-import type { CustomFetch } from "@tanstack/react-start";
+import type { CustomFetch } from '@tanstack/react-start';
 
-const loggingMiddleware = createMiddleware({ type: "function" }).client(async ({ next }) => {
+const loggingMiddleware = createMiddleware({ type: 'function' }).client(async ({ next }) => {
   const customFetch: CustomFetch = async (url, init) => {
-    console.log("Request:", url);
+    console.log('Request:', url);
     return fetch(url, init);
   };
   return next({ fetch: customFetch });
@@ -316,14 +316,14 @@ During SSR, `.client()` callbacks run on the server. Browser-only APIs like `loc
 
 ```tsx
 // WRONG — localStorage doesn't exist on the server during SSR
-const middleware = createMiddleware({ type: "function" }).client(async ({ next }) => {
-  const token = localStorage.getItem("token");
+const middleware = createMiddleware({ type: 'function' }).client(async ({ next }) => {
+  const token = localStorage.getItem('token');
   return next({ sendContext: { token } });
 });
 
 // CORRECT — use cookies/headers or guard with typeof window check
-const middleware = createMiddleware({ type: "function" }).client(async ({ next }) => {
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+const middleware = createMiddleware({ type: 'function' }).client(async ({ next }) => {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   return next({ sendContext: { token } });
 });
 ```

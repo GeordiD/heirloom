@@ -1,17 +1,17 @@
-import RecipeCard from "#/components/RecipeCard";
-import { Input } from "#/components/ui/input";
-import { fetchRecipes } from "#/server/functions/recipes.functions";
-import { useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
-import { Search } from "lucide-react";
-import { useState } from "react";
+import RecipeCard from '#/components/RecipeCard';
+import { Input } from '#/components/ui/input';
+import { fetchRecipes } from '#/server/functions/recipes.functions';
+import { useQuery } from '@tanstack/react-query';
+import { createFileRoute } from '@tanstack/react-router';
+import { Search } from 'lucide-react';
+import { useState } from 'react';
 
 const recipesQueryOptions = {
-  queryKey: ["recipes"] as const,
+  queryKey: ['recipes'] as const,
   queryFn: fetchRecipes,
 };
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute('/')({
   loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(recipesQueryOptions),
   component: RecipesPage,
 });
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
 function RecipesPage() {
   const { data: recipes = [] } = useQuery(recipesQueryOptions);
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const filtered = recipes.filter(
     (r) =>

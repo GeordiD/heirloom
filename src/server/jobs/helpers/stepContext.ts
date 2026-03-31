@@ -1,5 +1,5 @@
-import { AsyncLocalStorage } from "node:async_hooks";
-import type { UsageStats } from "#/server/utils/UsageStats";
+import { AsyncLocalStorage } from 'node:async_hooks';
+import type { UsageStats } from '#/server/utils/UsageStats';
 
 export type StepMetadata = {
   usage?: UsageStats;
@@ -23,7 +23,7 @@ export function getStepContext(): StepContext | undefined {
 export function requireStepContext(): StepContext {
   const context = getStepContext();
   if (!context) {
-    throw new Error("No step context available. This function must be called within a step.");
+    throw new Error('No step context available. This function must be called within a step.');
   }
   return context;
 }

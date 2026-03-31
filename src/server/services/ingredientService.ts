@@ -1,6 +1,6 @@
-import { eq, ilike, or } from "drizzle-orm";
-import { getDb } from "#/server/db";
-import { ingredients } from "#/server/db/schema";
+import { eq, ilike, or } from 'drizzle-orm';
+import { getDb } from '#/server/db';
+import { ingredients } from '#/server/db/schema';
 
 class IngredientService {
   async findSimilarIngredients(

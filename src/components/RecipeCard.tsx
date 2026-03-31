@@ -1,6 +1,6 @@
-import { Card, CardContent, CardFooter } from "#/components/ui/card";
-import { Badge } from "#/components/ui/badge";
-import type { Recipe } from "#/server/services/recipeService";
+import { Card, CardContent, CardFooter } from '#/components/ui/card';
+import { Badge } from '#/components/ui/badge';
+import type { Recipe } from '#/server/services/recipeService';
 
 export default function RecipeCard({ recipe }: { recipe: Recipe }) {
   return (

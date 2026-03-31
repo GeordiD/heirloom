@@ -1,10 +1,10 @@
-import { AsyncLocalStorage } from "node:async_hooks";
-import { UsageStats } from "#/server/utils/UsageStats";
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { UsageStats } from '#/server/utils/UsageStats';
 
 export type JobStepEvent =
-  | { type: "step_start"; name: string }
-  | { type: "step_complete"; name: string }
-  | { type: "step_error"; name: string; error: string };
+  | { type: 'step_start'; name: string }
+  | { type: 'step_complete'; name: string }
+  | { type: 'step_error'; name: string; error: string };
 
 export type JobEventEmitter = (event: JobStepEvent) => void;
 
@@ -27,7 +27,7 @@ export function getJobContext(): JobContext | undefined {
 export function requireJobContext(): JobContext {
   const context = getJobContext();
   if (!context) {
-    throw new Error("No job context available. This function must be called within a job.");
+    throw new Error('No job context available. This function must be called within a job.');
   }
   return context;
 }

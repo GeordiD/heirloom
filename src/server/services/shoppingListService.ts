@@ -1,7 +1,7 @@
-import { eq } from "drizzle-orm";
-import { getDb } from "#/server/db";
-import { createError } from "#/server/utils/createError";
-import { mealPlans, shoppingListItems } from "#/server/db/schema";
+import { eq } from 'drizzle-orm';
+import { getDb } from '#/server/db';
+import { createError } from '#/server/utils/createError';
+import { mealPlans, shoppingListItems } from '#/server/db/schema';
 
 export type ShoppingListItem = {
   id: number;
@@ -32,13 +32,13 @@ class ShoppingListService {
     });
 
     if (!mealPlan) {
-      throw createError({ statusCode: 404, message: "Meal plan not found" });
+      throw createError({ statusCode: 404, message: 'Meal plan not found' });
     }
 
     if (mealPlan.userId !== userId) {
       throw createError({
         statusCode: 403,
-        message: "Not authorized to modify this shopping list",
+        message: 'Not authorized to modify this shopping list',
       });
     }
 
@@ -119,11 +119,11 @@ class ShoppingListService {
     });
 
     if (!item) {
-      throw createError({ statusCode: 404, message: "Shopping list item not found" });
+      throw createError({ statusCode: 404, message: 'Shopping list item not found' });
     }
 
     if (item.mealPlan.userId !== userId) {
-      throw createError({ statusCode: 403, message: "Not authorized to update this item" });
+      throw createError({ statusCode: 403, message: 'Not authorized to update this item' });
     }
 
     const [updatedItem] = await db
@@ -138,7 +138,7 @@ class ShoppingListService {
       .returning();
 
     if (!updatedItem) {
-      throw createError({ statusCode: 500, message: "Failed to update item" });
+      throw createError({ statusCode: 500, message: 'Failed to update item' });
     }
 
     return {
@@ -161,13 +161,13 @@ class ShoppingListService {
     });
 
     if (!mealPlan) {
-      throw createError({ statusCode: 404, message: "Meal plan not found" });
+      throw createError({ statusCode: 404, message: 'Meal plan not found' });
     }
 
     if (mealPlan.userId !== userId) {
       throw createError({
         statusCode: 403,
-        message: "Not authorized to delete this shopping list",
+        message: 'Not authorized to delete this shopping list',
       });
     }
 

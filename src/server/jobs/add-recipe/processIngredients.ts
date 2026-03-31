@@ -1,11 +1,11 @@
-import pLimit from "p-limit";
-import { step } from "#/server/jobs/helpers/step";
-import type { ParsedIngredient } from "#/server/schemas/ingredientSchema";
-import type { RecipeData } from "#/server/schemas/recipeSchema";
-import { ingredientService } from "#/server/services/ingredientService";
-import { matchIngredient } from "#/server/services/prompts/matchIngredient";
-import { parseIngredient } from "#/server/services/prompts/parseIngredient";
-import { createError } from "#/server/utils/createError";
+import pLimit from 'p-limit';
+import { step } from '#/server/jobs/helpers/step';
+import type { ParsedIngredient } from '#/server/schemas/ingredientSchema';
+import type { RecipeData } from '#/server/schemas/recipeSchema';
+import { ingredientService } from '#/server/services/ingredientService';
+import { matchIngredient } from '#/server/services/prompts/matchIngredient';
+import { parseIngredient } from '#/server/services/prompts/parseIngredient';
+import { createError } from '#/server/utils/createError';
 
 export type MappedIngredient = {
   ingredient: string;
@@ -19,7 +19,7 @@ export interface MappedIngredientGroup {
 
 export async function processIngredients({
   ingredients: ingredientGroups,
-}: Pick<RecipeData, "ingredients">): Promise<MappedIngredientGroup[]> {
+}: Pick<RecipeData, 'ingredients'>): Promise<MappedIngredientGroup[]> {
   const limit = pLimit(5);
   const ingredientNames = ingredientGroups.flatMap(({ items }, i) =>
     items.map((name) => ({ name, groupIndex: i })),
@@ -28,7 +28,7 @@ export async function processIngredients({
   const tasks = ingredientNames.map(({ name, groupIndex }) =>
     limit(() =>
       step(
-        "process-ingredient",
+        'process-ingredient',
         async ({ rawName, groupIndex }: { rawName: string; groupIndex: number }) => {
           const mappedIngredient = await processIngredient(rawName);
           return { mappedIngredient, groupIndex };
@@ -47,7 +47,7 @@ export async function processIngredients({
 }
 
 export async function processIngredient(rawName: string): Promise<MappedIngredient> {
-  const { parsed } = await step("llm-parse-ingredient", parseIngredient, rawName);
+  const { parsed } = await step('llm-parse-ingredient', parseIngredient, rawName);
 
   const matchedIngredient = await matchIngredientName(parsed.name);
 
@@ -63,14 +63,14 @@ export async function processIngredient(rawName: string): Promise<MappedIngredie
 
 async function matchIngredientName(inputName: string): Promise<{ id: number; name: string }> {
   const exactMatch = await step(
-    "match-ingredient-via-exact",
+    'match-ingredient-via-exact',
     ingredientService.findIngredientByName.bind(ingredientService),
     inputName,
   );
   if (exactMatch) return exactMatch;
 
   const candidates = await ingredientService.findSimilarIngredients(inputName);
-  const { match } = await step("match-ingredient-via-llm", matchIngredient, {
+  const { match } = await step('match-ingredient-via-llm', matchIngredient, {
     parsedName: inputName,
     candidates,
   });
@@ -91,7 +91,7 @@ async function matchIngredientName(inputName: string): Promise<{ id: number; nam
   const createdIngredient = await ingredientService.createIngredient(match.standardizedName);
 
   if (!createdIngredient) {
-    throw createError({ statusCode: 500, statusMessage: "Failed to create new ingredient" });
+    throw createError({ statusCode: 500, statusMessage: 'Failed to create new ingredient' });
   }
 
   return createdIngredient;

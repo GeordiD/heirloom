@@ -1,9 +1,9 @@
-import { eq } from "drizzle-orm";
-import { getDb } from "#/server/db";
-import { step as stepTable } from "#/server/db/schema";
-import { getJobContext, requireJobContext } from "#/server/jobs/helpers/jobContext";
-import type { StepMetadata } from "./stepContext";
-import { getStepContext, stepContext } from "./stepContext";
+import { eq } from 'drizzle-orm';
+import { getDb } from '#/server/db';
+import { step as stepTable } from '#/server/db/schema';
+import { getJobContext, requireJobContext } from '#/server/jobs/helpers/jobContext';
+import type { StepMetadata } from './stepContext';
+import { getStepContext, stepContext } from './stepContext';
 
 // Overload for single-parameter functions
 export async function step<TFn extends (arg: any) => any>(
@@ -27,7 +27,7 @@ export async function step(
   const metadata: Record<string, unknown> = initialMetadata ?? {};
   const parentStepId = getStepContext()?.stepId;
 
-  getJobContext()?.onEvent?.({ type: "step_start", name });
+  getJobContext()?.onEvent?.({ type: 'step_start', name });
 
   const [insertedStep] = await db
     .insert(stepTable)
@@ -40,7 +40,7 @@ export async function step(
     })
     .returning();
 
-  if (!insertedStep) throw new Error("Failed to create step");
+  if (!insertedStep) throw new Error('Failed to create step');
 
   const context = { metadata, stepId: insertedStep.id };
 
@@ -54,7 +54,7 @@ export async function step(
       .set({ output: result as unknown, metadata, completedAt: new Date() })
       .where(eq(stepTable.id, insertedStep.id));
 
-    getJobContext()?.onEvent?.({ type: "step_complete", name });
+    getJobContext()?.onEvent?.({ type: 'step_complete', name });
 
     return result;
   } catch (error) {
@@ -71,7 +71,7 @@ export async function step(
       .where(eq(stepTable.id, insertedStep.id));
 
     getJobContext()?.onEvent?.({
-      type: "step_error",
+      type: 'step_error',
       name,
       error: error instanceof Error ? error.message : String(error),
     });

@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
-import { getDb } from "#/server/db";
-import { recipes } from "#/server/db/schema";
+import { eq } from 'drizzle-orm';
+import { getDb } from '#/server/db';
+import { recipes } from '#/server/db/schema';
 
 export type Recipe = {
   id: number;

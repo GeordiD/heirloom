@@ -1,4 +1,4 @@
-import type { GenerateObjectResult } from "ai";
+import type { GenerateObjectResult } from 'ai';
 
 interface UsageStatsData {
   inputTokens: number;
@@ -66,7 +66,7 @@ export class UsageStats implements UsageStatsData {
       | { cacheCreationInputTokens?: number }
       | undefined;
     const cacheCreationInputTokens =
-      typeof anthropicMetadata?.cacheCreationInputTokens === "number"
+      typeof anthropicMetadata?.cacheCreationInputTokens === 'number'
         ? anthropicMetadata.cacheCreationInputTokens
         : 0;
 

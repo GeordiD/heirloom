@@ -1,12 +1,12 @@
-import { getDb } from "#/server/db";
+import { getDb } from '#/server/db';
 import {
   recipeIngredientGroups,
   recipeIngredients,
   recipeInstructions,
   recipeNotes,
   recipes,
-} from "#/server/db/schema";
-import type { RecipeDataWithMappedIngredients } from "#/server/jobs/add-recipe/index";
+} from '#/server/db/schema';
+import type { RecipeDataWithMappedIngredients } from '#/server/jobs/add-recipe/index';
 
 export async function saveRecipe(
   recipeData: RecipeDataWithMappedIngredients,
@@ -28,7 +28,7 @@ export async function saveRecipe(
       })
       .returning();
 
-    if (!savedRecipe) throw new Error("Failed to create recipe");
+    if (!savedRecipe) throw new Error('Failed to create recipe');
 
     for (let groupIndex = 0; groupIndex < recipeData.ingredients.length; groupIndex++) {
       const ingredientGroup = recipeData.ingredients[groupIndex];
@@ -43,7 +43,7 @@ export async function saveRecipe(
         })
         .returning();
 
-      if (!savedGroup) throw new Error("Failed to create ingredient group");
+      if (!savedGroup) throw new Error('Failed to create ingredient group');
 
       for (let itemIndex = 0; itemIndex < ingredientGroup.mappedItems.length; itemIndex++) {
         const mappedItem = ingredientGroup.mappedItems[itemIndex];

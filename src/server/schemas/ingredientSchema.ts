@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const parsedIngredientSchema = z.object({
   quantity: z
@@ -32,14 +32,14 @@ export const ingredientMatchSchema = z.object({
   matchedId: z
     .number()
     .nullable()
-    .describe("The ID of the matched ingredient from the database. Null if no good match found."),
+    .describe('The ID of the matched ingredient from the database. Null if no good match found.'),
   standardizedName: z
     .string()
     .describe(
-      "The standardized name to use. If matchedId is provided, this should match the matched ingredient. If null, this is the suggested new standardized name.",
+      'The standardized name to use. If matchedId is provided, this should match the matched ingredient. If null, this is the suggested new standardized name.',
     ),
   confidence: z
-    .enum(["high", "medium", "low"])
+    .enum(['high', 'medium', 'low'])
     .describe(
       'Confidence level of the match. "high" for exact/very close matches, "medium" for likely matches, "low" for uncertain matches.',
     ),

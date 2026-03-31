@@ -1,7 +1,7 @@
-import type { IngredientMatch } from "#/server/schemas/ingredientSchema";
-import { ingredientMatchSchema } from "#/server/schemas/ingredientSchema";
-import { llmService } from "#/server/services/llmService";
-import { createError } from "#/server/utils/createError";
+import type { IngredientMatch } from '#/server/schemas/ingredientSchema';
+import { ingredientMatchSchema } from '#/server/schemas/ingredientSchema';
+import { llmService } from '#/server/services/llmService';
+import { createError } from '#/server/utils/createError';
 
 const MATCHING_SYSTEM_PROMPT = `You are an expert at matching and standardizing recipe ingredient names.
 
@@ -46,25 +46,25 @@ export async function matchIngredient({
 }): Promise<{ match: IngredientMatch }> {
   const candidatesText =
     candidates.length > 0
-      ? candidates.map((c) => `- ID ${c.id}: "${c.name}"`).join("\n")
-      : "No existing ingredients in database yet.";
+      ? candidates.map((c) => `- ID ${c.id}: "${c.name}"`).join('\n')
+      : 'No existing ingredients in database yet.';
 
   try {
     const result = await llmService.generateObject({
       schema: ingredientMatchSchema,
       messages: [
         {
-          role: "user",
+          role: 'user',
           content: [
             {
-              type: "text",
+              type: 'text',
               text: MATCHING_SYSTEM_PROMPT,
               providerOptions: {
-                anthropic: { cacheControl: { type: "ephemeral" } },
+                anthropic: { cacheControl: { type: 'ephemeral' } },
               },
             },
             {
-              type: "text",
+              type: 'text',
               text: `Ingredient to match: "${parsedName}"\n\nExisting standardized ingredients:\n${candidatesText}`,
             },
           ],
@@ -77,7 +77,7 @@ export async function matchIngredient({
     throw createError({
       statusCode: 500,
       statusMessage: `Failed to match ingredient "${parsedName}": ${
-        error instanceof Error ? error.message : "Unknown error"
+        error instanceof Error ? error.message : 'Unknown error'
       }`,
     });
   }

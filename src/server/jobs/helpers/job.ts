@@ -1,8 +1,8 @@
-import { eq } from "drizzle-orm";
-import { getDb } from "#/server/db";
-import { job as jobTable } from "#/server/db/schema";
-import type { JobContext, JobEventEmitter } from "./jobContext";
-import { jobContext } from "./jobContext";
+import { eq } from 'drizzle-orm';
+import { getDb } from '#/server/db';
+import { job as jobTable } from '#/server/db/schema';
+import type { JobContext, JobEventEmitter } from './jobContext';
+import { jobContext } from './jobContext';
 
 export type JobResult<T> = {
   result: T;
@@ -18,7 +18,7 @@ export async function job<T>(
 
   const [insertedJob] = await db.insert(jobTable).values({ workflowName: name }).returning();
 
-  if (!insertedJob) throw new Error("Failed to create job");
+  if (!insertedJob) throw new Error('Failed to create job');
 
   const context: JobContext = {
     jobId: insertedJob.id,

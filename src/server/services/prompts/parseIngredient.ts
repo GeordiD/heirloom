@@ -1,7 +1,7 @@
-import type { ParsedIngredient } from "#/server/schemas/ingredientSchema";
-import { parsedIngredientSchema } from "#/server/schemas/ingredientSchema";
-import { llmService } from "#/server/services/llmService";
-import { createError } from "#/server/utils/createError";
+import type { ParsedIngredient } from '#/server/schemas/ingredientSchema';
+import { parsedIngredientSchema } from '#/server/schemas/ingredientSchema';
+import { llmService } from '#/server/services/llmService';
+import { createError } from '#/server/utils/createError';
 
 const PARSING_SYSTEM_PROMPT = `You are an expert at parsing recipe ingredient text into structured components.
 
@@ -46,17 +46,17 @@ export async function parseIngredient(
       schema: parsedIngredientSchema,
       messages: [
         {
-          role: "user",
+          role: 'user',
           content: [
             {
-              type: "text",
+              type: 'text',
               text: PARSING_SYSTEM_PROMPT,
               providerOptions: {
-                anthropic: { cacheControl: { type: "ephemeral" } },
+                anthropic: { cacheControl: { type: 'ephemeral' } },
               },
             },
             {
-              type: "text",
+              type: 'text',
               text: `Parse the following ingredient:\n\n${rawIngredient}`,
             },
           ],
@@ -69,7 +69,7 @@ export async function parseIngredient(
     throw createError({
       statusCode: 500,
       statusMessage: `Failed to parse ingredient "${rawIngredient}": ${
-        error instanceof Error ? error.message : "Unknown error"
+        error instanceof Error ? error.message : 'Unknown error'
       }`,
     });
   }

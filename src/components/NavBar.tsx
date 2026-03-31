@@ -1,9 +1,9 @@
-import { Link } from "@tanstack/react-router";
-import { Plus, UtensilsCrossed, ShoppingCart } from "lucide-react";
-import ThemeToggle from "./ThemeToggle";
+import { Link } from '@tanstack/react-router';
+import { Plus, UtensilsCrossed, ShoppingCart } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 const navIconClass =
-  "rounded-full p-2 text-[var(--sea-ink-soft)] transition hover:bg-[var(--chip-bg)] hover:text-[var(--sea-ink)]";
+  'rounded-full p-2 text-[var(--sea-ink-soft)] transition hover:bg-[var(--chip-bg)] hover:text-[var(--sea-ink)]';
 
 export default function NavBar() {
   return (
