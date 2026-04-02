@@ -21,7 +21,7 @@ function RecipePage() {
   const [activeTab, setActiveTab] = useState<'ingredients' | 'instructions'>('ingredients');
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-8">
+    <main className="mx-auto max-w-4xl p-6">
       <RecipeTopNav recipe={recipe} />
 
       <div className="flex flex-col gap-4 pb-4">
@@ -34,13 +34,13 @@ function RecipePage() {
         {/* Mobile tabs */}
         <div className="flex gap-2 lg:hidden">
           <button
-            className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${activeTab === 'ingredients' ? 'bg-accent text-foreground' : 'text-muted-foreground hover:bg-accent/50'}`}
+            className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${activeTab === 'ingredients' ? 'bg-primary text-background' : 'text-muted-foreground hover:bg-accent/50'}`}
             onClick={() => setActiveTab('ingredients')}
           >
             Ingredients
           </button>
           <button
-            className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${activeTab === 'instructions' ? 'bg-accent text-foreground' : 'text-muted-foreground hover:bg-accent/50'}`}
+            className={`flex-1 rounded-lg py-2 text-sm font-medium transition ${activeTab === 'instructions' ? 'bg-primary text-background' : 'text-muted-foreground hover:bg-accent/50'}`}
             onClick={() => setActiveTab('instructions')}
           >
             Instructions

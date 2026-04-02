@@ -42,7 +42,7 @@ export function RecipeTopNav({ recipe }: { recipe: RecipeDetail }) {
     <>
       <div className="mb-4 flex h-10 items-center justify-between">
         <Link to="/">
-          <Button variant="ghost" size="icon" aria-label="Back to recipes">
+          <Button variant="secondary" size="icon" aria-label="Back to recipes">
             <ChevronLeft size={20} />
           </Button>
         </Link>
@@ -60,18 +60,20 @@ export function RecipeTopNav({ recipe }: { recipe: RecipeDetail }) {
             </div>
           ) : (
             <>
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label="Copy link to recipe"
-                onClick={handleCopyLink}
-              >
-                <Link2 size={16} />
-              </Button>
+              {recipe.sourceUrl && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Copy link to recipe"
+                  onClick={handleCopyLink}
+                >
+                  <Link2 size={16} />
+                </Button>
+              )}
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label="More options">
+                  <Button variant="secondary" size="icon" aria-label="More options">
                     <MoreVertical size={16} />
                   </Button>
                 </DropdownMenuTrigger>

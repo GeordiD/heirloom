@@ -98,11 +98,11 @@ class RecipeService {
     return result.length > 0;
   }
 
-  async markIngredientDoNotUse(recipeIngredientId: number): Promise<boolean> {
+  async markIngredientDoNotUse(recipeIngredientId: number, value = true): Promise<boolean> {
     const db = await getDb();
     const result = await db
       .update(recipeIngredients)
-      .set({ doNotUse: true })
+      .set({ doNotUse: value })
       .where(eq(recipeIngredients.id, recipeIngredientId))
       .returning();
     return result.length > 0;

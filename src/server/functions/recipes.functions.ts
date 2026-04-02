@@ -18,8 +18,8 @@ export const updateRecipeName = createServerFn({ method: 'POST' })
   .handler((ctx) => recipeService.updateRecipeName(ctx.data.id, ctx.data.name));
 
 export const markIngredientDoNotUse = createServerFn({ method: 'POST' })
-  .inputValidator((id: number) => id)
-  .handler((ctx) => recipeService.markIngredientDoNotUse(ctx.data));
+  .inputValidator((input: { id: number; value?: boolean }) => input)
+  .handler((ctx) => recipeService.markIngredientDoNotUse(ctx.data.id, ctx.data.value));
 
 export const upsertIngredientSubstitution = createServerFn({ method: 'POST' })
   .inputValidator((input: { recipeIngredientId: number; ingredient: string }) => input)

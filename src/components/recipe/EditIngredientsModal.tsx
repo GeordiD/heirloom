@@ -13,7 +13,7 @@ import {
 } from '#/server/functions/recipes.functions';
 import type { recipeService } from '#/server/services/recipeService';
 import { useRouter } from '@tanstack/react-router';
-import { Trash2 } from 'lucide-react';
+import { RefreshCw, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
 type RecipeDetail = NonNullable<Awaited<ReturnType<typeof recipeService.getRecipeById>>>;
@@ -22,6 +22,7 @@ interface FlatIngredient {
   id: number;
   name: string;
   originalName: string;
+  isDeleted: boolean;
 }
 
 function flattenIngredients(recipe: RecipeDetail): FlatIngredient[] {
@@ -30,6 +31,7 @@ function flattenIngredients(recipe: RecipeDetail): FlatIngredient[] {
       id: item.id,
       name: item.name ?? '',
       originalName: item.name ?? '',
+      isDeleted: item.isUnused ?? false,
     })),
   );
 }
@@ -48,10 +50,11 @@ export function EditIngredientsModal({ recipe, open, onClose }: Props) {
   const [isSaving, setIsSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleDelete = async (id: number) => {
+  const handleDeleteOrRestore = async (id: number, value: boolean) => {
     try {
-      await markIngredientDoNotUse({ data: id });
-      setIngredients((prev) => prev.filter((ing) => ing.id !== id));
+      await markIngredientDoNotUse({ data: { id, value } });
+      await router.invalidate();
+      setIngredients(ingredients.map((x) => (x.id === id ? { ...x, isDeleted: value } : x)));
     } catch (err) {
       console.error('Failed to remove ingredient:', err);
     }
@@ -105,7 +108,7 @@ export function EditIngredientsModal({ recipe, open, onClose }: Props) {
               <Input
                 value={ingredient.name}
                 disabled={isSaving}
-                className="flex-1"
+                className={['flex-1', ingredient.isDeleted ? 'line-through' : undefined].join(' ')}
                 onChange={(e) =>
                   setIngredients((prev) =>
                     prev.map((ing) =>
@@ -114,15 +117,27 @@ export function EditIngredientsModal({ recipe, open, onClose }: Props) {
                   )
                 }
               />
-              <Button
-                variant="ghost"
-                size="icon"
-                disabled={isSaving}
-                onClick={() => void handleDelete(ingredient.id)}
-                aria-label="Remove ingredient"
-              >
-                <Trash2 size={16} />
-              </Button>
+              {ingredient.isDeleted ? (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  disabled={isSaving}
+                  onClick={() => void handleDeleteOrRestore(ingredient.id, false)}
+                  aria-label="Restore ingredient"
+                >
+                  <RefreshCw size={16} />
+                </Button>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  disabled={isSaving}
+                  onClick={() => void handleDeleteOrRestore(ingredient.id, true)}
+                  aria-label="Remove ingredient"
+                >
+                  <Trash2 size={16} />
+                </Button>
+              )}
             </div>
           ))}
         </div>
