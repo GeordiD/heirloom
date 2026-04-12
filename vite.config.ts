@@ -18,10 +18,7 @@ const config = defineConfig({
   resolve: { tsconfigPaths: true },
   plugins: [
     devtools(),
-    nitro({
-      rollupConfig: { external: [/^@sentry\//] },
-      serverAssets: [{ baseName: 'migrations', dir: './src/server/db/migrations' }],
-    }),
+    nitro({ rollupConfig: { external: [/^@sentry\//] } }),
     tailwindcss(),
     tanstackStart(),
     viteReact(),

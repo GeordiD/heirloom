@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "vp dev --port 3000",
     "build": "vp build",
-    "start": "node .output/server/index.mjs",
+    "start": "pnpm db:migrate && node .output/server/index.mjs",
     "preview": "vp preview",
     "test": "vp test run",
     "db:generate": "drizzle-kit generate",
