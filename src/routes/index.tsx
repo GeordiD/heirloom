@@ -29,8 +29,8 @@ function RecipesPage() {
   );
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-8">
-      <div className="mb-8 flex items-center gap-4">
+    <main className="mx-auto max-w-4xl px-4 py-4 flex flex-col gap-4 mb-4">
+      <div className="flex items-center gap-4">
         <h1 className="display-title text-3xl font-bold text-foreground">Recipes</h1>
         <div className="relative max-w-sm flex-1">
           <Search
@@ -53,7 +53,7 @@ function RecipesPage() {
           No recipes match &ldquo;{search}&rdquo;.
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((recipe) => (
             <RecipeCard key={recipe.id} recipe={recipe} />
           ))}
