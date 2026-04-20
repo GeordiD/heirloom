@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as MealPlanRouteImport } from './routes/meal-plan'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RecipesIdRouteImport } from './routes/recipes/$id'
 
+const MealPlanRoute = MealPlanRouteImport.update({
+  id: '/meal-plan',
+  path: '/meal-plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -32,35 +38,46 @@ const RecipesIdRoute = RecipesIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/meal-plan': typeof MealPlanRoute
   '/recipes/$id': typeof RecipesIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/meal-plan': typeof MealPlanRoute
   '/recipes/$id': typeof RecipesIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/meal-plan': typeof MealPlanRoute
   '/recipes/$id': typeof RecipesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/recipes/$id'
+  fullPaths: '/' | '/about' | '/meal-plan' | '/recipes/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/recipes/$id'
-  id: '__root__' | '/' | '/about' | '/recipes/$id'
+  to: '/' | '/about' | '/meal-plan' | '/recipes/$id'
+  id: '__root__' | '/' | '/about' | '/meal-plan' | '/recipes/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  MealPlanRoute: typeof MealPlanRoute
   RecipesIdRoute: typeof RecipesIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/meal-plan': {
+      id: '/meal-plan'
+      path: '/meal-plan'
+      fullPath: '/meal-plan'
+      preLoaderRoute: typeof MealPlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  MealPlanRoute: MealPlanRoute,
   RecipesIdRoute: RecipesIdRoute,
 }
 export const routeTree = rootRouteImport
