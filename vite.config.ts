@@ -1,3 +1,4 @@
+import { serwist } from '@serwist/vite';
 import { devtools } from '@tanstack/devtools-vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import { defineConfig } from 'vite-plus';
@@ -22,6 +23,13 @@ const config = defineConfig({
     tailwindcss(),
     tanstackStart(),
     viteReact(),
+    serwist({
+      swSrc: 'src/sw.ts',
+      swDest: 'sw.js',
+      globDirectory: '.output/public',
+      injectionPoint: 'self.__SW_MANIFEST',
+      rollupFormat: 'iife',
+    }),
   ],
 });
 
