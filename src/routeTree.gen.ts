@@ -8,131 +8,150 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root';
-import { Route as MealPlanRouteImport } from './routes/meal-plan';
-import { Route as AboutRouteImport } from './routes/about';
-import { Route as IndexRouteImport } from './routes/index';
-import { Route as ListsIndexRouteImport } from './routes/lists/index';
-import { Route as RecipesIdRouteImport } from './routes/recipes/$id';
-import { Route as ListsCreateRouteImport } from './routes/lists/create';
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as MealPlanRouteImport } from './routes/meal-plan'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as ListsIndexRouteImport } from './routes/lists/index'
+import { Route as RecipesIdRouteImport } from './routes/recipes/$id'
+import { Route as ListsCreateRouteImport } from './routes/lists/create'
 
 const MealPlanRoute = MealPlanRouteImport.update({
   id: '/meal-plan',
   path: '/meal-plan',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ListsIndexRoute = ListsIndexRouteImport.update({
   id: '/lists/',
   path: '/lists/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const RecipesIdRoute = RecipesIdRouteImport.update({
   id: '/recipes/$id',
   path: '/recipes/$id',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ListsCreateRoute = ListsCreateRouteImport.update({
   id: '/lists/create',
   path: '/lists/create',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute;
-  '/about': typeof AboutRoute;
-  '/meal-plan': typeof MealPlanRoute;
-  '/lists/create': typeof ListsCreateRoute;
-  '/recipes/$id': typeof RecipesIdRoute;
-  '/lists/': typeof ListsIndexRoute;
+  '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/meal-plan': typeof MealPlanRoute
+  '/lists/create': typeof ListsCreateRoute
+  '/recipes/$id': typeof RecipesIdRoute
+  '/lists/': typeof ListsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute;
-  '/about': typeof AboutRoute;
-  '/meal-plan': typeof MealPlanRoute;
-  '/lists/create': typeof ListsCreateRoute;
-  '/recipes/$id': typeof RecipesIdRoute;
-  '/lists': typeof ListsIndexRoute;
+  '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/meal-plan': typeof MealPlanRoute
+  '/lists/create': typeof ListsCreateRoute
+  '/recipes/$id': typeof RecipesIdRoute
+  '/lists': typeof ListsIndexRoute
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport;
-  '/': typeof IndexRoute;
-  '/about': typeof AboutRoute;
-  '/meal-plan': typeof MealPlanRoute;
-  '/lists/create': typeof ListsCreateRoute;
-  '/recipes/$id': typeof RecipesIdRoute;
-  '/lists/': typeof ListsIndexRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/meal-plan': typeof MealPlanRoute
+  '/lists/create': typeof ListsCreateRoute
+  '/recipes/$id': typeof RecipesIdRoute
+  '/lists/': typeof ListsIndexRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/' | '/about' | '/meal-plan' | '/lists/create' | '/recipes/$id' | '/lists/';
-  fileRoutesByTo: FileRoutesByTo;
-  to: '/' | '/about' | '/meal-plan' | '/lists/create' | '/recipes/$id' | '/lists';
-  id: '__root__' | '/' | '/about' | '/meal-plan' | '/lists/create' | '/recipes/$id' | '/lists/';
-  fileRoutesById: FileRoutesById;
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/meal-plan'
+    | '/lists/create'
+    | '/recipes/$id'
+    | '/lists/'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/about'
+    | '/meal-plan'
+    | '/lists/create'
+    | '/recipes/$id'
+    | '/lists'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/meal-plan'
+    | '/lists/create'
+    | '/recipes/$id'
+    | '/lists/'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  AboutRoute: typeof AboutRoute;
-  MealPlanRoute: typeof MealPlanRoute;
-  ListsCreateRoute: typeof ListsCreateRoute;
-  RecipesIdRoute: typeof RecipesIdRoute;
-  ListsIndexRoute: typeof ListsIndexRoute;
+  IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  MealPlanRoute: typeof MealPlanRoute
+  ListsCreateRoute: typeof ListsCreateRoute
+  RecipesIdRoute: typeof RecipesIdRoute
+  ListsIndexRoute: typeof ListsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/meal-plan': {
-      id: '/meal-plan';
-      path: '/meal-plan';
-      fullPath: '/meal-plan';
-      preLoaderRoute: typeof MealPlanRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/meal-plan'
+      path: '/meal-plan'
+      fullPath: '/meal-plan'
+      preLoaderRoute: typeof MealPlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
-      id: '/about';
-      path: '/about';
-      fullPath: '/about';
-      preLoaderRoute: typeof AboutRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
-      id: '/';
-      path: '/';
-      fullPath: '/';
-      preLoaderRoute: typeof IndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lists/': {
-      id: '/lists/';
-      path: '/lists';
-      fullPath: '/lists/';
-      preLoaderRoute: typeof ListsIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/lists/'
+      path: '/lists'
+      fullPath: '/lists/'
+      preLoaderRoute: typeof ListsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/recipes/$id': {
-      id: '/recipes/$id';
-      path: '/recipes/$id';
-      fullPath: '/recipes/$id';
-      preLoaderRoute: typeof RecipesIdRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/recipes/$id'
+      path: '/recipes/$id'
+      fullPath: '/recipes/$id'
+      preLoaderRoute: typeof RecipesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lists/create': {
-      id: '/lists/create';
-      path: '/lists/create';
-      fullPath: '/lists/create';
-      preLoaderRoute: typeof ListsCreateRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/lists/create'
+      path: '/lists/create'
+      fullPath: '/lists/create'
+      preLoaderRoute: typeof ListsCreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -143,16 +162,16 @@ const rootRouteChildren: RootRouteChildren = {
   ListsCreateRoute: ListsCreateRoute,
   RecipesIdRoute: RecipesIdRoute,
   ListsIndexRoute: ListsIndexRoute,
-};
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
 
-import type { getRouter } from './router.tsx';
-import type { createStart } from '@tanstack/react-start';
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
 declare module '@tanstack/react-start' {
   interface Register {
-    ssr: true;
-    router: Awaited<ReturnType<typeof getRouter>>;
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
   }
 }
