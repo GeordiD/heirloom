@@ -1,0 +1,2 @@
+ALTER TABLE "step" ADD COLUMN "parent_step_id" integer;--> statement-breakpoint
+ALTER TABLE "step" ADD CONSTRAINT "step_parent_step_id_step_id_fk" FOREIGN KEY ("parent_step_id") REFERENCES "public"."step"("id") ON DELETE no action ON UPDATE no action;

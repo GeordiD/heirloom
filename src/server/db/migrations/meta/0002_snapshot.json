@@ -1,6 +1,6 @@
 {
-  "id": "10644023-9a36-403b-8dc4-7142e2c42fbd",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "ae2fdec6-eebe-412d-84ff-2cd59887bbdb",
+  "prevId": "434ae8c3-bf92-4fe4-801a-484c5f2d9eee",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -58,6 +58,47 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.recipe_ingredient_substitutions": {
+      "name": "recipe_ingredient_substitutions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ingredient_id": {
+          "name": "ingredient_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ingredient": {
+          "name": "ingredient",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "recipe_ingredient_substitutions_ingredient_id_recipe_ingredients_id_fk": {
+          "name": "recipe_ingredient_substitutions_ingredient_id_recipe_ingredients_id_fk",
+          "tableFrom": "recipe_ingredient_substitutions",
+          "tableTo": "recipe_ingredients",
+          "columnsFrom": ["ingredient_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.recipe_ingredients": {
       "name": "recipe_ingredients",
       "schema": "",
@@ -92,6 +133,13 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "do_not_use": {
+          "name": "do_not_use",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
         }
       },
       "indexes": {},
@@ -285,6 +333,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
