@@ -10,8 +10,8 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools';
 
 import appCss from '../styles.css?url';
 
-import { useEffect } from 'react';
 import type { QueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -30,7 +30,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'Heirloom',
       },
     ],
     links: [
