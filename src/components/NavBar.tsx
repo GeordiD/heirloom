@@ -1,9 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import { Plus, UtensilsCrossed, ShoppingCart } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
-
-const navIconClass =
-  'rounded-full p-2 text-muted-foreground transition hover:bg-accent hover:text-foreground';
 
 export default function NavBar() {
   return (
@@ -15,15 +11,6 @@ export default function NavBar() {
           </Link>
 
           <div className="flex items-center gap-1">
-            <a href="/add-recipe" aria-label="Add recipe" className={navIconClass}>
-              <Plus size={20} />
-            </a>
-            <a href="/meal-plan" aria-label="Meal plan" className={navIconClass}>
-              <UtensilsCrossed size={20} />
-            </a>
-            <a href="/lists" aria-label="Shopping list" className={navIconClass}>
-              <ShoppingCart size={20} />
-            </a>
             <div className="ml-1">
               <ThemeToggle />
             </div>
