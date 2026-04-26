@@ -1,4 +1,3 @@
-import { Footer } from '#/components/Footer';
 import NavBar from '#/components/NavBar';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import type { QueryClient } from '@tanstack/react-query';
@@ -55,11 +54,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <HeadContent />
       </head>
-      <body className="font-sans antialiased [overflow-wrap:anywhere] selection:bg-lagoon/24">
+      <body className="font-sans antialiased [overflow-wrap:anywhere] selection:bg-lagoon/24 pb-20">
         <TanStackQueryProvider>
           <NavBar />
           {children}
-          <Footer />
           <TanStackDevtools
             config={{
               triggerHidden: true,

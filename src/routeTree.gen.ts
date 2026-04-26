@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MealPlanRouteImport } from './routes/meal-plan'
 import { Route as AddRecipeRouteImport } from './routes/add-recipe'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ListsIndexRouteImport } from './routes/lists/index'
 import { Route as RecipesIdRouteImport } from './routes/recipes/$id'
@@ -25,11 +24,6 @@ const MealPlanRoute = MealPlanRouteImport.update({
 const AddRecipeRoute = AddRecipeRouteImport.update({
   id: '/add-recipe',
   path: '/add-recipe',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -55,7 +49,6 @@ const ListsCreateRoute = ListsCreateRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/add-recipe': typeof AddRecipeRoute
   '/meal-plan': typeof MealPlanRoute
   '/lists/create': typeof ListsCreateRoute
@@ -64,7 +57,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/add-recipe': typeof AddRecipeRoute
   '/meal-plan': typeof MealPlanRoute
   '/lists/create': typeof ListsCreateRoute
@@ -74,7 +66,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/add-recipe': typeof AddRecipeRoute
   '/meal-plan': typeof MealPlanRoute
   '/lists/create': typeof ListsCreateRoute
@@ -85,7 +76,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/about'
     | '/add-recipe'
     | '/meal-plan'
     | '/lists/create'
@@ -94,7 +84,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/about'
     | '/add-recipe'
     | '/meal-plan'
     | '/lists/create'
@@ -103,7 +92,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/about'
     | '/add-recipe'
     | '/meal-plan'
     | '/lists/create'
@@ -113,7 +101,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
   AddRecipeRoute: typeof AddRecipeRoute
   MealPlanRoute: typeof MealPlanRoute
   ListsCreateRoute: typeof ListsCreateRoute
@@ -135,13 +122,6 @@ declare module '@tanstack/react-router' {
       path: '/add-recipe'
       fullPath: '/add-recipe'
       preLoaderRoute: typeof AddRecipeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -177,7 +157,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
   AddRecipeRoute: AddRecipeRoute,
   MealPlanRoute: MealPlanRoute,
   ListsCreateRoute: ListsCreateRoute,

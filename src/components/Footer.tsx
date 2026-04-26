@@ -1,12 +1,12 @@
 import { List, Plus, ShoppingCart, UtensilsCrossed } from 'lucide-react';
 
 const navIconClass =
-  'rounded-full p-5 text-muted-foreground transition hover:bg-accent hover:text-foreground';
+  'rounded-full p-4 text-muted-foreground transition hover:bg-accent hover:text-foreground';
 
 export function Footer() {
   return (
     <>
-      <nav className="fixed left-4 right-4 bottom-4 z-50 h-20 rounded-full border-2 border-border bg-card px-4 py-3 backdrop-blur-sm">
+      <nav className="fixed left-4 right-4 bottom-4 z-50 h-14 rounded-full border-2 border-border bg-card px-2 py-2 backdrop-blur-sm">
         <div className="flex items-center justify-between gap-2 h-full">
           <a href="/meal-plan" aria-label="Meal plan" className={navIconClass}>
             <UtensilsCrossed size={20} />
