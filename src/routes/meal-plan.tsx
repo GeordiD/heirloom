@@ -52,7 +52,7 @@ function MealPlanPage() {
           </div>
         ) : null}
 
-        <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border p-4">
+        <div className="bg-background border-t border-border p-4">
           <div className="mx-auto max-w-4xl flex gap-3">
             <Button variant="outline" size="lg" onClick={() => void handleClearAll()}>
               Clear All

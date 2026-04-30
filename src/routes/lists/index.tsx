@@ -49,7 +49,7 @@ function ShoppingListPage() {
 
   return (
     <>
-      <div className="flex flex-col h-screen max-w-[414px] mx-auto">
+      <div className="flex flex-col max-w-[414px] mx-auto">
         <header className="sticky top-0 z-10 bg-background border-b border-border px-4 py-4">
           <h1 className="text-2xl font-bold text-foreground">Shopping List</h1>
         </header>
@@ -118,12 +118,6 @@ function ShoppingListPage() {
             </ul>
           )}
         </main>
-
-        <footer className="sticky bottom-0 z-10 bg-background border-t border-border px-4 py-4">
-          <Button size="lg" className="w-full" asChild>
-            <a href="/meal-plan">Back to Meal Plan</a>
-          </Button>
-        </footer>
       </div>
       <Footer />
     </>
