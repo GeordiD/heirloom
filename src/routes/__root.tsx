@@ -1,17 +1,13 @@
+import NavBar from '#/components/NavBar';
 import { TanStackDevtools } from '@tanstack/react-devtools';
+import type { QueryClient } from '@tanstack/react-query';
 import { HeadContent, Scripts, createRootRouteWithContext } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
-import { getSerwist } from 'virtual:serwist';
-import NavBar from '../components/NavBar';
-
-import TanStackQueryProvider from '../integrations/tanstack-query/root-provider';
-
-import TanStackQueryDevtools from '../integrations/tanstack-query/devtools';
-
-import appCss from '../styles.css?url';
-
-import type { QueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import { getSerwist } from 'virtual:serwist';
+import TanStackQueryDevtools from '../integrations/tanstack-query/devtools';
+import TanStackQueryProvider from '../integrations/tanstack-query/root-provider';
+import appCss from '../styles.css?url';
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -58,13 +54,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <HeadContent />
       </head>
-      <body className="font-sans antialiased [overflow-wrap:anywhere] selection:bg-lagoon/24">
+      <body className="font-sans antialiased [overflow-wrap:anywhere] selection:bg-lagoon/24 pb-20">
         <TanStackQueryProvider>
           <NavBar />
           {children}
           <TanStackDevtools
             config={{
-              position: 'bottom-right',
+              triggerHidden: true,
             }}
             plugins={[
               {

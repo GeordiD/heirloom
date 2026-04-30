@@ -1,4 +1,7 @@
+import { Button } from '#/components/ui/button';
+import { Moon, Sun, SunMoon } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { match } from 'ts-pattern';
 
 type ThemeMode = 'light' | 'dark' | 'auto';
 
@@ -67,14 +70,16 @@ export default function ThemeToggle() {
       : `Theme mode: ${mode}. Click to switch mode.`;
 
   return (
-    <button
-      type="button"
-      onClick={toggleMode}
-      aria-label={label}
-      title={label}
-      className="rounded-full border border-border bg-accent px-3 py-1.5 text-sm font-semibold text-foreground shadow-[0_8px_22px_rgba(30,90,72,0.08)] transition hover:-translate-y-0.5"
-    >
-      {mode === 'auto' ? 'Auto' : mode === 'dark' ? 'Dark' : 'Light'}
-    </button>
+    <Button onClick={toggleMode} aria-label={label} title={label} variant="ghost">
+      <ToggleIcon mode={mode} />
+    </Button>
   );
+}
+
+function ToggleIcon({ mode, size = 18 }: { mode: ThemeMode; size?: number }) {
+  return match(mode)
+    .with('auto', () => <SunMoon size={size} />)
+    .with('dark', () => <Sun size={size} />)
+    .with('light', () => <Moon size={size} />)
+    .exhaustive();
 }
