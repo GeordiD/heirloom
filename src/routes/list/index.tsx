@@ -13,7 +13,7 @@ const shoppingListQueryOptions = {
   queryFn: fetchShoppingList,
 };
 
-export const Route = createFileRoute('/lists/')({
+export const Route = createFileRoute('/list/')({
   loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(shoppingListQueryOptions),
   component: ShoppingListPage,
 });

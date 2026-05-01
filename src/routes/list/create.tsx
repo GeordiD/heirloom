@@ -14,7 +14,7 @@ const creationDataQueryOptions = {
   queryFn: fetchShoppingListCreationData,
 };
 
-export const Route = createFileRoute('/lists/create')({
+export const Route = createFileRoute('/list/create')({
   loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(creationDataQueryOptions),
   component: CreateShoppingListPage,
 });
@@ -286,7 +286,7 @@ function CreateShoppingListPage() {
         await addShoppingListItems({ data: { mealPlanId: data.mealPlanId, items } });
       }
 
-      await navigate({ to: '/lists' });
+      await navigate({ to: '/list' });
     } catch (err) {
       console.error('Failed to create shopping list:', err);
       setSubmitting(false);
@@ -312,7 +312,7 @@ function CreateShoppingListPage() {
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <p className="text-muted-foreground text-lg mb-4">No meals in your meal plan</p>
             <Button asChild>
-              <a href="/meal-plan">Go to Meal Plan</a>
+              <a href="/">Go to Meal Plan</a>
             </Button>
           </div>
         ) : currentRecipe !== null ? (
