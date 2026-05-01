@@ -8,7 +8,7 @@ import { addRecipeByUrl } from '#/server/functions/recipes.functions';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
-export const Route = createFileRoute('/add-recipe')({
+export const Route = createFileRoute('/add')({
   component: AddRecipePage,
 });
 

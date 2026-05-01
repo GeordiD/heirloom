@@ -1,27 +1,31 @@
+import { Link, useLocation } from '@tanstack/react-router';
 import { BookOpen, CalendarDays, PlusCircle, ShoppingCart } from 'lucide-react';
-
-const navIconClass =
-  'rounded-full p-4 text-muted-foreground transition hover:bg-accent hover:text-foreground';
 
 export function Footer() {
   return (
     <>
-      <nav className="fixed left-4 right-4 bottom-4 z-50 h-14 rounded-full border-2 border-border bg-card px-2 py-2 backdrop-blur-sm">
-        <div className="flex items-center justify-between gap-2 h-full">
-          <a href="/meal-plan" aria-label="Meal plan" className={navIconClass}>
-            <CalendarDays size={20} />
-          </a>
-          <a href="/" aria-label="Recipe List" className={navIconClass}>
-            <BookOpen size={20} />
-          </a>
-          <a href="/add-recipe" aria-label="Add recipe" className={navIconClass}>
-            <PlusCircle size={20} />
-          </a>
-          <a href="/lists" aria-label="Shopping list" className={navIconClass}>
-            <ShoppingCart size={20} />
-          </a>
+      <nav className="fixed left-4 right-4 bottom-4 z-50 h-14">
+        <div className="flex items-center justify-between gap-2 h-full px-1 py-2 rounded-full border-2 border-border bg-card max-w-120 mx-auto">
+          <Option icon={<CalendarDays size={20} />} url="/" label="Meal Plan" />
+          <Option icon={<BookOpen size={20} />} url="/recipes" label="Recipe List" />
+          <Option icon={<PlusCircle size={20} />} url="/add" label="Add Recipe" />
+          <Option icon={<ShoppingCart size={20} />} url="/list" label="Shopping List" />
         </div>
       </nav>
     </>
+  );
+}
+
+function Option({ icon, url, label }: { icon: React.ReactElement; url: string; label: string }) {
+  const location = useLocation();
+  const isActive = location.pathname == url;
+
+  const defaultClasses = 'rounded-full p-3 transition';
+  const activeClasses = isActive ? 'bg-primary text-background' : '';
+
+  return (
+    <Link to={url} aria-label={label} className={[defaultClasses, activeClasses].join(' ')}>
+      {icon}
+    </Link>
   );
 }

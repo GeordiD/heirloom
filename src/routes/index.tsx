@@ -1,65 +1,67 @@
 import { Footer } from '#/components/Footer';
-import RecipeCard from '#/components/RecipeCard';
-import { Input } from '#/components/ui/input';
-import { fetchRecipes } from '#/server/functions/recipes.functions';
-import { useQuery } from '@tanstack/react-query';
+import { MealPlanDay } from '#/components/meal-plan/MealPlanDay';
+import { Button } from '#/components/ui/button';
+import { clearAllMeals, fetchMealPlan } from '#/server/functions/mealPlan.functions';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { Search } from 'lucide-react';
-import { useState } from 'react';
 
-const recipesQueryOptions = {
-  queryKey: ['recipes'] as const,
-  queryFn: fetchRecipes,
+const mealPlanQueryOptions = {
+  queryKey: ['meal-plan'] as const,
+  queryFn: fetchMealPlan,
 };
 
 export const Route = createFileRoute('/')({
-  loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(recipesQueryOptions),
-  component: RecipesPage,
+  loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(mealPlanQueryOptions),
+  component: MealPlanPage,
 });
 
-function RecipesPage() {
-  const { data: recipes = [] } = useQuery(recipesQueryOptions);
-  const [search, setSearch] = useState('');
+function MealPlanPage() {
+  const queryClient = useQueryClient();
+  const { data: mealPlan, isPending, error } = useQuery(mealPlanQueryOptions);
 
-  const filtered = recipes.filter(
-    (r) =>
-      !search ||
-      r.name.toLowerCase().includes(search.toLowerCase()) ||
-      r.cuisine?.toLowerCase().includes(search.toLowerCase()),
-  );
+  async function handleClearAll() {
+    try {
+      await clearAllMeals();
+      await queryClient.invalidateQueries({ queryKey: ['meal-plan'] });
+    } catch (err) {
+      console.error('Failed to clear meals:', err);
+    }
+  }
 
   return (
     <>
-      <main className="mx-auto max-w-4xl px-4 py-4 flex flex-col gap-4 mb-4">
-        <div className="flex items-center gap-4">
-          <h1 className="display-title text-3xl font-bold text-foreground">Recipes</h1>
-          <div className="relative max-w-sm flex-1">
-            <Search
-              size={16}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-            />
-            <Input
-              placeholder="Search recipes..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9"
-            />
-          </div>
+      <main className="mx-auto max-w-4xl px-4 py-4">
+        <div className="mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-2">Meal Plan</h1>
+          <p className="text-muted-foreground">Plan your meals for the week</p>
         </div>
 
-        {recipes.length === 0 ? (
-          <div className="py-12 text-center text-muted-foreground">No recipes yet.</div>
-        ) : filtered.length === 0 ? (
-          <div className="py-12 text-center text-muted-foreground">
-            No recipes match &ldquo;{search}&rdquo;.
+        {isPending && !mealPlan ? (
+          <div className="flex justify-center py-12">
+            <div className="text-muted-foreground">Loading meal plan...</div>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe} />
+        ) : error && !mealPlan ? (
+          <div className="py-12 text-center text-destructive">
+            <p>Failed to load meal plan. Please try again later.</p>
+          </div>
+        ) : mealPlan ? (
+          <div className="space-y-6">
+            {mealPlan.days.map((day) => (
+              <MealPlanDay key={day.id} day={day} />
             ))}
           </div>
-        )}
+        ) : null}
+
+        <div className="bg-background border-t border-border p-4">
+          <div className="mx-auto max-w-4xl flex gap-3">
+            <Button variant="outline" size="lg" onClick={() => void handleClearAll()}>
+              Clear All
+            </Button>
+            <Button asChild size="lg" className="flex-1">
+              <a href="/lists/create">Create Shopping List</a>
+            </Button>
+          </div>
+        </div>
       </main>
       <Footer />
     </>
