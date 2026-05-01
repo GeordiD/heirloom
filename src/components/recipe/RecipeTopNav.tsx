@@ -10,7 +10,7 @@ import {
 } from '#/components/ui/dropdown-menu';
 import { deleteRecipe } from '#/server/functions/recipes.functions';
 import { RecipeDetail } from '#/server/services/recipeService';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { useNavigate, useRouter } from '@tanstack/react-router';
 import { ChevronLeft, Link2, MoreVertical } from 'lucide-react';
 import { useState } from 'react';
 
@@ -20,6 +20,7 @@ export function RecipeTopNav({ recipe }: { recipe: RecipeDetail }) {
   const [isShowingDeleteConfirm, setIsShowingDeleteConfirm] = useState(false);
   const [isEditNameOpen, setIsEditNameOpen] = useState(false);
   const [isEditIngredientsOpen, setIsEditIngredientsOpen] = useState(false);
+  const router = useRouter();
 
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -41,11 +42,14 @@ export function RecipeTopNav({ recipe }: { recipe: RecipeDetail }) {
   return (
     <>
       <div className="mb-4 flex h-10 items-center justify-between">
-        <Link to="/">
-          <Button variant="secondary" size="icon" aria-label="Back to recipes">
-            <ChevronLeft size={20} />
-          </Button>
-        </Link>
+        <Button
+          variant="secondary"
+          size="icon"
+          aria-label="Back to recipes"
+          onClick={() => router.history.back()}
+        >
+          <ChevronLeft size={20} />
+        </Button>
 
         <div className="flex items-center gap-2">
           {isShowingDeleteConfirm ? (

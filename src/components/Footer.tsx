@@ -20,8 +20,8 @@ function Option({ icon, url, label }: { icon: React.ReactElement; url: string; l
   const location = useLocation();
   const isActive = location.pathname == url;
 
-  const defaultClasses = 'rounded-full p-3 transition hover:bg-accent hover:text-foreground';
-  const activeClasses = isActive ? 'bg-primary text-foreground' : '';
+  const defaultClasses = 'rounded-full p-3 transition';
+  const activeClasses = isActive ? 'bg-primary text-background' : '';
 
   return (
     <Link to={url} aria-label={label} className={[defaultClasses, activeClasses].join(' ')}>
