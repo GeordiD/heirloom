@@ -1,18 +1,38 @@
 import { Link, useLocation } from '@tanstack/react-router';
-import { BookOpen, CalendarDays, PlusCircle, ShoppingCart } from 'lucide-react';
+import { BookOpen, CalendarDays, Plus, ShoppingCart } from 'lucide-react';
 
 export function Footer() {
   return (
     <>
-      <nav className="fixed left-4 right-4 bottom-4 z-50 h-14">
-        <div className="flex items-center justify-between gap-2 h-full px-1 py-2 rounded-full border-2 border-border bg-card max-w-120 mx-auto">
-          <Option icon={<CalendarDays size={20} />} url="/" label="Meal Plan" />
-          <Option icon={<BookOpen size={20} />} url="/recipes" label="Recipe List" />
-          <Option icon={<PlusCircle size={20} />} url="/add" label="Add Recipe" />
-          <Option icon={<ShoppingCart size={20} />} url="/list" label="Shopping List" />
+      <nav className="fixed left-6 right-6 bottom-6 z-50 h-14">
+        <div className="max-w-120 mx-auto h-full flex gap-3">
+          <FloatingContainer className="grow">
+            <Option icon={<CalendarDays size={20} />} url="/" label="Meal Plan" />
+            <Option icon={<BookOpen size={20} />} url="/recipes" label="Recipe List" />
+            <Option icon={<ShoppingCart size={20} />} url="/list" label="Shopping List" />
+          </FloatingContainer>
+          <FloatingContainer>
+            <Option icon={<Plus size={20} />} url="/add" label="Add Recipe" />
+          </FloatingContainer>
         </div>
       </nav>
     </>
+  );
+}
+
+function FloatingContainer({
+  children,
+  className = '',
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`flex items-center justify-between gap-2 h-full px-1 py-2 rounded-full border-2 border-border bg-card ${className}`}
+    >
+      {children}
+    </div>
   );
 }
 
@@ -20,8 +40,8 @@ function Option({ icon, url, label }: { icon: React.ReactElement; url: string; l
   const location = useLocation();
   const isActive = location.pathname == url;
 
-  const defaultClasses = 'rounded-full p-3 transition';
-  const activeClasses = isActive ? 'bg-primary text-background' : '';
+  const defaultClasses = 'rounded-full p-3 transition grow flex justify-center';
+  const activeClasses = isActive ? 'bg-secondary text-red-700' : '';
 
   return (
     <Link to={url} aria-label={label} className={[defaultClasses, activeClasses].join(' ')}>
