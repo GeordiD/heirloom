@@ -22,7 +22,11 @@ const config = defineConfig({
     nitro({ rollupConfig: { external: [/^@sentry\//] } }),
     tailwindcss(),
     tanstackStart(),
-    viteReact(),
+    viteReact({
+      babel: {
+        plugins: [['babel-plugin-react-compiler']],
+      },
+    }),
     serwist({
       swSrc: 'src/sw.ts',
       swDest: 'sw.js',

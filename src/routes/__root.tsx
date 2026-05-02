@@ -1,3 +1,4 @@
+import { Footer } from '#/components/Footer';
 import NavBar from '#/components/NavBar';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import type { QueryClient } from '@tanstack/react-query';
@@ -58,6 +59,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <TanStackQueryProvider>
           <NavBar />
           {children}
+          <Footer />
           <TanStackDevtools
             config={{
               triggerHidden: true,

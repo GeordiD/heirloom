@@ -1,4 +1,3 @@
-import { Footer } from '#/components/Footer';
 import { Button } from '#/components/ui/button';
 import {
   fetchShoppingList,
@@ -119,7 +118,6 @@ function ShoppingListPage() {
           )}
         </main>
       </div>
-      <Footer />
     </>
   );
 }
