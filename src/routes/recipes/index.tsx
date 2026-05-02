@@ -1,5 +1,6 @@
 import RecipeCard from '#/components/RecipeCard';
 import { Input } from '#/components/ui/input';
+import { useShowFooter } from '#/contexts/FooterContext';
 import { fetchRecipes } from '#/server/functions/recipes.functions';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
@@ -17,6 +18,7 @@ export const Route = createFileRoute('/recipes/')({
 });
 
 function RecipesPage() {
+  useShowFooter(true);
   const { data: recipes = [] } = useQuery(recipesQueryOptions);
   const [search, setSearch] = useState('');
 

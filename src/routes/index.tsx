@@ -1,5 +1,6 @@
 import { MealPlanDay } from '#/components/meal-plan/MealPlanDay';
 import { Button } from '#/components/ui/button';
+import { useShowFooter } from '#/contexts/FooterContext';
 import { clearAllMeals, fetchMealPlan } from '#/server/functions/mealPlan.functions';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
@@ -15,6 +16,7 @@ export const Route = createFileRoute('/')({
 });
 
 function MealPlanPage() {
+  useShowFooter(true);
   const queryClient = useQueryClient();
   const { data: mealPlan, isPending, error } = useQuery(mealPlanQueryOptions);
 

@@ -1,5 +1,6 @@
 import { Footer } from '#/components/Footer';
 import NavBar from '#/components/NavBar';
+import { FooterProvider } from '#/contexts/FooterContext';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import type { QueryClient } from '@tanstack/react-query';
 import { HeadContent, Scripts, createRootRouteWithContext } from '@tanstack/react-router';
@@ -57,9 +58,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="font-sans antialiased [overflow-wrap:anywhere] selection:bg-lagoon/24 pb-20">
         <TanStackQueryProvider>
-          <NavBar />
-          {children}
-          <Footer />
+          <FooterProvider>
+            <NavBar />
+            {children}
+            <Footer />
+          </FooterProvider>
           <TanStackDevtools
             config={{
               triggerHidden: true,

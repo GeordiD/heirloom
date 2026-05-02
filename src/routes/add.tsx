@@ -4,6 +4,7 @@ import { Button } from '#/components/ui/button';
 import { Card, CardContent } from '#/components/ui/card';
 import { Input } from '#/components/ui/input';
 import { Label } from '#/components/ui/label';
+import { useShowFooter } from '#/contexts/FooterContext';
 import { addRecipeByUrl } from '#/server/functions/recipes.functions';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
@@ -13,6 +14,7 @@ export const Route = createFileRoute('/add')({
 });
 
 function AddRecipePage() {
+  useShowFooter(true);
   const navigate = useNavigate();
   const [url, setUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);

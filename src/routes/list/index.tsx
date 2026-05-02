@@ -1,4 +1,5 @@
 import { Button } from '#/components/ui/button';
+import { useShowFooter } from '#/contexts/FooterContext';
 import {
   fetchShoppingList,
   updateShoppingListItem,
@@ -18,6 +19,7 @@ export const Route = createFileRoute('/list/')({
 });
 
 function ShoppingListPage() {
+  useShowFooter(true);
   const queryClient = useQueryClient();
   const { data: shoppingList, isPending, error } = useQuery(shoppingListQueryOptions);
 

@@ -1,3 +1,4 @@
+import { useFooter } from '#/contexts/FooterContext';
 import { Link, useLocation } from '@tanstack/react-router';
 import { BookOpen, CalendarDays, Plus, ShoppingCart } from 'lucide-react';
 import React from 'react';
@@ -23,6 +24,12 @@ const options: FooterOptionProps[] = [
 ];
 
 export function Footer() {
+  const { isVisible } = useFooter();
+
+  if (!isVisible) {
+    return null;
+  }
+
   return (
     <>
       <nav className="fixed left-6 right-6 bottom-6 z-50 h-14">
