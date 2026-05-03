@@ -1,6 +1,5 @@
 import { Button } from '#/components/ui/button';
 import { Input } from '#/components/ui/input';
-import { useShowFooter } from '#/contexts/FooterContext';
 import {
   addShoppingListItems,
   fetchShoppingListCreationData,
@@ -42,7 +41,6 @@ type CustomMealStep = {
 };
 
 function CreateShoppingListPage() {
-  useShowFooter(false);
   const navigate = useNavigate();
   const { data, isPending, error } = useQuery(creationDataQueryOptions);
 

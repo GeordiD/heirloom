@@ -9,32 +9,22 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AddRouteImport } from './routes/add'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as RecipesIndexRouteImport } from './routes/recipes/index'
-import { Route as ListIndexRouteImport } from './routes/list/index'
+import { Route as FooterRouteImport } from './routes/_footer'
+import { Route as FooterIndexRouteImport } from './routes/_footer/index'
 import { Route as RecipesIdRouteImport } from './routes/recipes/$id'
 import { Route as ListCreateRouteImport } from './routes/list/create'
+import { Route as FooterAddRouteImport } from './routes/_footer/add'
+import { Route as FooterRecipesIndexRouteImport } from './routes/_footer/recipes/index'
+import { Route as FooterListIndexRouteImport } from './routes/_footer/list/index'
 
-const AddRoute = AddRouteImport.update({
-  id: '/add',
-  path: '/add',
+const FooterRoute = FooterRouteImport.update({
+  id: '/_footer',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const FooterIndexRoute = FooterIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RecipesIndexRoute = RecipesIndexRouteImport.update({
-  id: '/recipes/',
-  path: '/recipes/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ListIndexRoute = ListIndexRouteImport.update({
-  id: '/list/',
-  path: '/list/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => FooterRoute,
 } as any)
 const RecipesIdRoute = RecipesIdRouteImport.update({
   id: '/recipes/$id',
@@ -46,31 +36,47 @@ const ListCreateRoute = ListCreateRouteImport.update({
   path: '/list/create',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FooterAddRoute = FooterAddRouteImport.update({
+  id: '/add',
+  path: '/add',
+  getParentRoute: () => FooterRoute,
+} as any)
+const FooterRecipesIndexRoute = FooterRecipesIndexRouteImport.update({
+  id: '/recipes/',
+  path: '/recipes/',
+  getParentRoute: () => FooterRoute,
+} as any)
+const FooterListIndexRoute = FooterListIndexRouteImport.update({
+  id: '/list/',
+  path: '/list/',
+  getParentRoute: () => FooterRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/add': typeof AddRoute
+  '/': typeof FooterIndexRoute
+  '/add': typeof FooterAddRoute
   '/list/create': typeof ListCreateRoute
   '/recipes/$id': typeof RecipesIdRoute
-  '/list/': typeof ListIndexRoute
-  '/recipes/': typeof RecipesIndexRoute
+  '/list/': typeof FooterListIndexRoute
+  '/recipes/': typeof FooterRecipesIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/add': typeof AddRoute
+  '/add': typeof FooterAddRoute
   '/list/create': typeof ListCreateRoute
   '/recipes/$id': typeof RecipesIdRoute
-  '/list': typeof ListIndexRoute
-  '/recipes': typeof RecipesIndexRoute
+  '/': typeof FooterIndexRoute
+  '/list': typeof FooterListIndexRoute
+  '/recipes': typeof FooterRecipesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/add': typeof AddRoute
+  '/_footer': typeof FooterRouteWithChildren
+  '/_footer/add': typeof FooterAddRoute
   '/list/create': typeof ListCreateRoute
   '/recipes/$id': typeof RecipesIdRoute
-  '/list/': typeof ListIndexRoute
-  '/recipes/': typeof RecipesIndexRoute
+  '/_footer/': typeof FooterIndexRoute
+  '/_footer/list/': typeof FooterListIndexRoute
+  '/_footer/recipes/': typeof FooterRecipesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -82,55 +88,39 @@ export interface FileRouteTypes {
     | '/list/'
     | '/recipes/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/add' | '/list/create' | '/recipes/$id' | '/list' | '/recipes'
+  to: '/add' | '/list/create' | '/recipes/$id' | '/' | '/list' | '/recipes'
   id:
     | '__root__'
-    | '/'
-    | '/add'
+    | '/_footer'
+    | '/_footer/add'
     | '/list/create'
     | '/recipes/$id'
-    | '/list/'
-    | '/recipes/'
+    | '/_footer/'
+    | '/_footer/list/'
+    | '/_footer/recipes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AddRoute: typeof AddRoute
+  FooterRoute: typeof FooterRouteWithChildren
   ListCreateRoute: typeof ListCreateRoute
   RecipesIdRoute: typeof RecipesIdRoute
-  ListIndexRoute: typeof ListIndexRoute
-  RecipesIndexRoute: typeof RecipesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/add': {
-      id: '/add'
-      path: '/add'
-      fullPath: '/add'
-      preLoaderRoute: typeof AddRouteImport
+    '/_footer': {
+      id: '/_footer'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof FooterRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_footer/': {
+      id: '/_footer/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/recipes/': {
-      id: '/recipes/'
-      path: '/recipes'
-      fullPath: '/recipes/'
-      preLoaderRoute: typeof RecipesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/list/': {
-      id: '/list/'
-      path: '/list'
-      fullPath: '/list/'
-      preLoaderRoute: typeof ListIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof FooterIndexRouteImport
+      parentRoute: typeof FooterRoute
     }
     '/recipes/$id': {
       id: '/recipes/$id'
@@ -146,16 +136,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ListCreateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_footer/add': {
+      id: '/_footer/add'
+      path: '/add'
+      fullPath: '/add'
+      preLoaderRoute: typeof FooterAddRouteImport
+      parentRoute: typeof FooterRoute
+    }
+    '/_footer/recipes/': {
+      id: '/_footer/recipes/'
+      path: '/recipes'
+      fullPath: '/recipes/'
+      preLoaderRoute: typeof FooterRecipesIndexRouteImport
+      parentRoute: typeof FooterRoute
+    }
+    '/_footer/list/': {
+      id: '/_footer/list/'
+      path: '/list'
+      fullPath: '/list/'
+      preLoaderRoute: typeof FooterListIndexRouteImport
+      parentRoute: typeof FooterRoute
+    }
   }
 }
 
+interface FooterRouteChildren {
+  FooterAddRoute: typeof FooterAddRoute
+  FooterIndexRoute: typeof FooterIndexRoute
+  FooterListIndexRoute: typeof FooterListIndexRoute
+  FooterRecipesIndexRoute: typeof FooterRecipesIndexRoute
+}
+
+const FooterRouteChildren: FooterRouteChildren = {
+  FooterAddRoute: FooterAddRoute,
+  FooterIndexRoute: FooterIndexRoute,
+  FooterListIndexRoute: FooterListIndexRoute,
+  FooterRecipesIndexRoute: FooterRecipesIndexRoute,
+}
+
+const FooterRouteWithChildren =
+  FooterRoute._addFileChildren(FooterRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AddRoute: AddRoute,
+  FooterRoute: FooterRouteWithChildren,
   ListCreateRoute: ListCreateRoute,
   RecipesIdRoute: RecipesIdRoute,
-  ListIndexRoute: ListIndexRoute,
-  RecipesIndexRoute: RecipesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

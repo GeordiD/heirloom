@@ -1,6 +1,5 @@
 import { RecipeTopNav } from '#/components/recipe/RecipeTopNav';
 import { Badge } from '#/components/ui/badge';
-import { useShowFooter } from '#/contexts/FooterContext';
 import { fetchRecipeById } from '#/server/functions/recipes.functions';
 import type { RecipeDetail } from '#/server/services/recipeService';
 import { createFileRoute, notFound } from '@tanstack/react-router';
@@ -18,7 +17,6 @@ export const Route = createFileRoute('/recipes/$id')({
 type Ingredient = RecipeDetail['ingredients'][number]['items'][number];
 
 function RecipePage() {
-  useShowFooter(false);
   const recipe = Route.useLoaderData();
   const [activeTab, setActiveTab] = useState<'ingredients' | 'instructions'>('ingredients');
 

@@ -1,6 +1,5 @@
 import RecipeCard from '#/components/RecipeCard';
 import { Input } from '#/components/ui/input';
-import { useShowFooter } from '#/contexts/FooterContext';
 import { fetchRecipes } from '#/server/functions/recipes.functions';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
@@ -12,13 +11,12 @@ const recipesQueryOptions = {
   queryFn: fetchRecipes,
 };
 
-export const Route = createFileRoute('/recipes/')({
+export const Route = createFileRoute('/_footer/recipes/')({
   loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(recipesQueryOptions),
   component: RecipesPage,
 });
 
 function RecipesPage() {
-  useShowFooter(true);
   const { data: recipes = [] } = useQuery(recipesQueryOptions);
   const [search, setSearch] = useState('');
 
