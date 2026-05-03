@@ -1,4 +1,3 @@
-import { Footer } from '#/components/Footer';
 import { MealPlanDay } from '#/components/meal-plan/MealPlanDay';
 import { Button } from '#/components/ui/button';
 import { clearAllMeals, fetchMealPlan } from '#/server/functions/mealPlan.functions';
@@ -10,7 +9,7 @@ const mealPlanQueryOptions = {
   queryFn: fetchMealPlan,
 };
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/_footer/')({
   loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(mealPlanQueryOptions),
   component: MealPlanPage,
 });
@@ -30,10 +29,9 @@ function MealPlanPage() {
 
   return (
     <>
-      <main className="mx-auto max-w-4xl px-4 py-4">
+      <main className="mx-auto max-w-4xl px-6 py-4">
         <div className="mb-4">
-          <h1 className="text-4xl font-bold text-foreground mb-2">Meal Plan</h1>
-          <p className="text-muted-foreground">Plan your meals for the week</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Meal Plan</h1>
         </div>
 
         {isPending && !mealPlan ? (
@@ -63,7 +61,6 @@ function MealPlanPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </>
   );
 }

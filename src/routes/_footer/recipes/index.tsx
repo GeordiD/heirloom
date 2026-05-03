@@ -1,4 +1,3 @@
-import { Footer } from '#/components/Footer';
 import RecipeCard from '#/components/RecipeCard';
 import { Input } from '#/components/ui/input';
 import { fetchRecipes } from '#/server/functions/recipes.functions';
@@ -12,7 +11,7 @@ const recipesQueryOptions = {
   queryFn: fetchRecipes,
 };
 
-export const Route = createFileRoute('/recipes/')({
+export const Route = createFileRoute('/_footer/recipes/')({
   loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(recipesQueryOptions),
   component: RecipesPage,
 });
@@ -30,9 +29,9 @@ function RecipesPage() {
 
   return (
     <>
-      <main className="mx-auto max-w-4xl px-4 py-4 flex flex-col gap-4 mb-4">
+      <main className="mx-auto max-w-4xl px-6 py-4 flex flex-col gap-4 mb-4">
         <div className="flex items-center gap-4">
-          <h1 className="display-title text-3xl font-bold text-foreground">Recipes</h1>
+          <h1 className="text-3xl font-bold text-foreground">Recipes</h1>
           <div className="relative max-w-sm flex-1">
             <Search
               size={16}
@@ -61,7 +60,6 @@ function RecipesPage() {
           </div>
         )}
       </main>
-      <Footer />
     </>
   );
 }

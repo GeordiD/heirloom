@@ -1,4 +1,3 @@
-import { Footer } from '#/components/Footer';
 import { Button } from '#/components/ui/button';
 import {
   fetchShoppingList,
@@ -13,7 +12,7 @@ const shoppingListQueryOptions = {
   queryFn: fetchShoppingList,
 };
 
-export const Route = createFileRoute('/list/')({
+export const Route = createFileRoute('/_footer/list/')({
   loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(shoppingListQueryOptions),
   component: ShoppingListPage,
 });
@@ -119,7 +118,6 @@ function ShoppingListPage() {
           )}
         </main>
       </div>
-      <Footer />
     </>
   );
 }
