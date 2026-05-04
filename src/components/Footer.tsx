@@ -82,7 +82,7 @@ function FooterOption({ icon, url, label }: FooterOptionProps) {
   const isActive = location.pathname == url;
 
   const defaultClasses = 'rounded-full p-3 transition grow flex justify-center z-10';
-  const activeClasses = isActive ? 'text-red-700' : '';
+  const activeClasses = isActive ? 'text-red-700 dark:text-red-400' : '';
 
   return (
     <Link to={url} aria-label={label} className={[defaultClasses, activeClasses].join(' ')}>
