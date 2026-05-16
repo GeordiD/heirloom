@@ -56,7 +56,7 @@ function MealPlanPage() {
               Clear All
             </Button>
             <Button asChild size="lg" className="flex-1">
-              <a href="/lists/create">Create Shopping List</a>
+              <a href="/list/create">Create Shopping List</a>
             </Button>
           </div>
         </div>
