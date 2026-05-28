@@ -5,6 +5,9 @@ import { saveRecipe } from '#/server/jobs/add-recipe/saveRecipe';
 import type { RecipeDataWithMappedIngredients } from '#/server/jobs/add-recipe';
 import { recipeService } from '#/server/services/recipeService';
 import { createServerFn } from '@tanstack/react-start';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { z } from 'zod';
 
 export const fetchRecipes = createServerFn({ method: 'GET' }).handler(() =>
@@ -38,6 +41,37 @@ const addRecipeByUrlInput = z.object({ url: z.string().url() });
 export const addRecipeByUrl = createServerFn({ method: 'POST' })
   .inputValidator((input: unknown) => addRecipeByUrlInput.parse(input))
   .handler((ctx) => addRecipeByUrlJob(ctx.data.url));
+
+const uploadRecipePhotosInput = z.object({
+  photos: z
+    .array(
+      z.object({
+        data: z.string().min(1),
+        mimeType: z.string().regex(/^image\//),
+      }),
+    )
+    .min(1)
+    .max(10),
+});
+
+export const uploadRecipePhotos = createServerFn({ method: 'POST' })
+  .inputValidator((input: unknown) => uploadRecipePhotosInput.parse(input))
+  .handler(async (ctx) => {
+    const { photos } = ctx.data;
+    const uploadId = crypto.randomUUID();
+    const dir = join(tmpdir(), 'heirloom-photos', uploadId);
+    await mkdir(dir, { recursive: true });
+
+    await Promise.all(
+      photos.map(async (photo, i) => {
+        const ext = photo.mimeType.split('/')[1] ?? 'jpg';
+        const filePath = join(dir, `photo-${i}.${ext}`);
+        await writeFile(filePath, Buffer.from(photo.data, 'base64'));
+      }),
+    );
+
+    return { uploadId };
+  });
 
 const addRecipeManuallyInput = z.object({
   name: z.string().min(1),
