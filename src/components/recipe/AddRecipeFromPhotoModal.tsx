@@ -6,8 +6,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '#/components/ui/dialog';
-import { uploadRecipePhotos } from '#/server/functions/recipes.functions';
+import { processRecipePhotos, uploadRecipePhotos } from '#/server/functions/recipes.functions';
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import { ImagePlus, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 
@@ -43,14 +44,24 @@ function readFileAsBase64(file: File): Promise<{ data: string; mimeType: string 
 }
 
 export function AddRecipeFromPhotoModal({ open, onClose }: Props) {
+  const navigate = useNavigate();
   const [photos, setPhotos] = useState<PhotoPreview[]>([]);
+  const [phase, setPhase] = useState<'uploading' | 'extracting' | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const uploadMutation = useMutation({
+  const submitMutation = useMutation({
     mutationFn: async (files: PhotoPreview[]) => {
+      setPhase('uploading');
       const photoData = await Promise.all(files.map(({ file }) => readFileAsBase64(file)));
-      return uploadRecipePhotos({ data: { photos: photoData } });
+      const { uploadId } = await uploadRecipePhotos({ data: { photos: photoData } });
+      setPhase('extracting');
+      return processRecipePhotos({ data: { uploadId } });
     },
+    onSuccess: (result) => {
+      handleClose();
+      void navigate({ to: '/recipes/$id', params: { id: String(result.id) } });
+    },
+    onSettled: () => setPhase(null),
   });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +88,7 @@ export function AddRecipeFromPhotoModal({ open, onClose }: Props) {
   const handleClose = () => {
     photos.forEach((p) => URL.revokeObjectURL(p.objectUrl));
     setPhotos([]);
-    uploadMutation.reset();
+    submitMutation.reset();
     onClose();
   };
 
@@ -85,7 +96,10 @@ export function AddRecipeFromPhotoModal({ open, onClose }: Props) {
     if (!isOpen) handleClose();
   };
 
-  const uploadId = uploadMutation.data?.uploadId ?? null;
+  const isPending = submitMutation.isPending;
+
+  const pendingLabel =
+    phase === 'uploading' ? 'Uploading…' : phase === 'extracting' ? 'Extracting recipe…' : null;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -94,83 +108,67 @@ export function AddRecipeFromPhotoModal({ open, onClose }: Props) {
           <DialogTitle>Add Recipe from Photo</DialogTitle>
         </DialogHeader>
 
-        {uploadId ? (
-          <div className="space-y-4 py-2">
-            <div className="rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800 dark:border-green-800 dark:bg-green-950/20 dark:text-green-200">
-              <p className="font-medium">
-                {photos.length === 1 ? '1 photo' : `${photos.length} photos`} uploaded successfully!
-              </p>
-              <p className="mt-1 text-green-700 dark:text-green-300">
-                AI processing will extract the recipe from your photos.
-              </p>
+        <div className="space-y-4">
+          {photos.length > 0 && (
+            <div className="grid grid-cols-3 gap-2">
+              {photos.map((photo, i) => (
+                <div key={photo.objectUrl} className="group relative aspect-square">
+                  <img
+                    src={photo.objectUrl}
+                    alt={`Recipe photo ${i + 1}`}
+                    className="h-full w-full rounded-md object-cover"
+                  />
+                  <button
+                    type="button"
+                    aria-label={`Remove photo ${i + 1}`}
+                    disabled={isPending}
+                    className="absolute right-1 top-1 flex size-5 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100 disabled:pointer-events-none"
+                    onClick={() => removePhoto(i)}
+                  >
+                    <X className="size-3" />
+                  </button>
+                </div>
+              ))}
             </div>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {photos.length > 0 && (
-              <div className="grid grid-cols-3 gap-2">
-                {photos.map((photo, i) => (
-                  <div key={photo.objectUrl} className="group relative aspect-square">
-                    <img
-                      src={photo.objectUrl}
-                      alt={`Recipe photo ${i + 1}`}
-                      className="h-full w-full rounded-md object-cover"
-                    />
-                    <button
-                      type="button"
-                      aria-label={`Remove photo ${i + 1}`}
-                      disabled={uploadMutation.isPending}
-                      className="absolute right-1 top-1 flex size-5 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100 disabled:pointer-events-none"
-                      onClick={() => removePhoto(i)}
-                    >
-                      <X className="size-3" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
+          )}
 
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              multiple
-              className="hidden"
-              onChange={handleFileChange}
-            />
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={handleFileChange}
+          />
 
-            <Button
-              variant="outline"
-              className="w-full"
-              disabled={uploadMutation.isPending}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <ImagePlus className="size-4" />
-              {photos.length > 0 ? 'Add More Photos' : 'Select Photos'}
-            </Button>
+          <Button
+            variant="outline"
+            className="w-full"
+            disabled={isPending}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <ImagePlus className="size-4" />
+            {photos.length > 0 ? 'Add More Photos' : 'Select Photos'}
+          </Button>
 
-            {photos.length > 0 && (
-              <p className="text-center text-xs text-muted-foreground">
-                {photos.length} {photos.length === 1 ? 'photo' : 'photos'} selected
-              </p>
-            )}
+          {photos.length > 0 && (
+            <p className="text-center text-xs text-muted-foreground">
+              {photos.length} {photos.length === 1 ? 'photo' : 'photos'} selected
+            </p>
+          )}
 
-            {uploadMutation.isError && (
-              <p className="text-sm text-destructive">Failed to upload photos. Please try again.</p>
-            )}
-          </div>
-        )}
+          {submitMutation.isError && (
+            <p className="text-sm text-destructive">Failed to process photos. Please try again.</p>
+          )}
+        </div>
 
         <DialogFooter>
-          <Button variant="ghost" disabled={uploadMutation.isPending} onClick={handleClose}>
-            {uploadId ? 'Done' : 'Cancel'}
+          <Button variant="ghost" disabled={isPending} onClick={handleClose}>
+            Cancel
           </Button>
-          {!uploadId && photos.length > 0 && (
-            <Button
-              disabled={uploadMutation.isPending}
-              onClick={() => uploadMutation.mutate(photos)}
-            >
-              {uploadMutation.isPending ? 'Uploading…' : 'Upload Photos'}
+          {photos.length > 0 && (
+            <Button disabled={isPending} onClick={() => submitMutation.mutate(photos)}>
+              {pendingLabel ?? 'Upload Photos'}
             </Button>
           )}
         </DialogFooter>

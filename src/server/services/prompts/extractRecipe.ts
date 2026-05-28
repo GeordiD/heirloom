@@ -3,15 +3,17 @@ import { recipeSchema } from '#/server/schemas/recipeSchema';
 import { llmService } from '#/server/services/llmService';
 import { createError } from '#/server/utils/createError';
 
+export const RECIPE_EXTRACTION_GUIDELINES = `Guidelines:
+- Extract ingredients as individual items, preserving quantities and descriptions
+- Copy instructions verbatim, exactly as written — do not paraphrase, summarize, or reword
+- Include timing information if present
+- Be precise and don't add information not in the content
+- If information is not available, omit that field`;
+
 export async function extractRecipe(content: string): Promise<{ recipe: RecipeData }> {
   const prompt = `Extract recipe information from the provided content.
 
-Guidelines:
-- Extract ingredients as individual items, preserving quantities and descriptions
-- Extract instructions as numbered steps in order
-- Include timing information if present
-- Be precise and don't add information not in the content
-- If information is not available, omit that field
+${RECIPE_EXTRACTION_GUIDELINES}
 
 Content:
 <content>

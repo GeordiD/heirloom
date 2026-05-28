@@ -1,4 +1,4 @@
-import { addRecipeByUrl as addRecipeByUrlJob } from '#/server/jobs/add-recipe';
+import { addRecipeByUrl as addRecipeByUrlJob, addRecipeByPhoto } from '#/server/jobs/add-recipe';
 import { job } from '#/server/jobs/helpers/job';
 import { processIngredients } from '#/server/jobs/add-recipe/processIngredients';
 import { saveRecipe } from '#/server/jobs/add-recipe/saveRecipe';
@@ -53,6 +53,12 @@ const uploadRecipePhotosInput = z.object({
     .min(1)
     .max(10),
 });
+
+const processRecipePhotosInput = z.object({ uploadId: z.string().uuid() });
+
+export const processRecipePhotos = createServerFn({ method: 'POST' })
+  .inputValidator((input: unknown) => processRecipePhotosInput.parse(input))
+  .handler((ctx) => addRecipeByPhoto(ctx.data.uploadId));
 
 export const uploadRecipePhotos = createServerFn({ method: 'POST' })
   .inputValidator((input: unknown) => uploadRecipePhotosInput.parse(input))
