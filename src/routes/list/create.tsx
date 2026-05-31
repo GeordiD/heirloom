@@ -15,7 +15,7 @@ const creationDataQueryOptions = {
 };
 
 export const Route = createFileRoute('/list/create')({
-  loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(creationDataQueryOptions),
+  loader: ({ context: { queryClient } }) => queryClient.fetchQuery(creationDataQueryOptions),
   component: CreateShoppingListPage,
 });
 
