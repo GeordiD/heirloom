@@ -8,7 +8,8 @@ export const RECIPE_EXTRACTION_GUIDELINES = `Guidelines:
 - Copy instructions verbatim, exactly as written — do not paraphrase, summarize, or reword
 - Include timing information if present
 - Be precise and don't add information not in the content
-- If information is not available, omit that field`;
+- If information is not available, omit that field
+- For the notes, you should paraphrase any additional information provided in the recipe concisely (< 200 char per note)`;
 
 export async function extractRecipe(content: string): Promise<{ recipe: RecipeData }> {
   const prompt = `Extract recipe information from the provided content.

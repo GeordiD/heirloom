@@ -29,8 +29,9 @@ export async function extractRecipeFromPhotos(
               type: 'text' as const,
               text: `Extract recipe information from the provided photo${photos.length > 1 ? 's' : ''}.
 
-${RECIPE_EXTRACTION_GUIDELINES}
-- Ingredients may be arranged in multiple columns. Scan the entire ingredients section carefully: read each column fully from top to bottom, then move to the next column. Do not skip any column or any item within a column.`,
+                ${RECIPE_EXTRACTION_GUIDELINES}
+                - Ingredients may be arranged in multiple columns. Scan the entire ingredients section carefully: read each column fully from top to bottom, then move to the next column. Do not skip any column or any item within a column.
+                - If you receive multiple files, assume it's the same recipe across multiple pages and combine the information into a single complete recipe`,
             },
           ],
         },

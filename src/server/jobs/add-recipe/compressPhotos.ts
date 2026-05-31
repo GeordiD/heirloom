@@ -16,6 +16,7 @@ export async function compressPhotos(uploadId: string): Promise<string> {
       const raw = await readFile(join(srcDir, file));
       const outName = file.replace(/\.[^.]+$/, '.jpg');
       await sharp(raw)
+        .rotate()
         .resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true })
         .jpeg({ quality: 75 })
         .toFile(join(destDir, outName));

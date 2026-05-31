@@ -85,7 +85,7 @@ export const recipeSchema = z.object({
       z
         .string()
         .min(1, 'Note cannot be empty')
-        .max(200, 'Note too long')
+        .max(350, 'Note too long')
         .describe('Individual important note, tip, or variation'),
     )
     .max(6, 'Too many notes - only include the most important ones')
