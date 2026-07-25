@@ -1,3 +1,4 @@
+import { AddRecipeFromFileModal } from '#/components/recipe/AddRecipeFromFileModal';
 import { AddRecipeFromPhotoModal } from '#/components/recipe/AddRecipeFromPhotoModal';
 import { AddRecipeManuallyModal } from '#/components/recipe/AddRecipeManuallyModal';
 import { Button } from '#/components/ui/button';
@@ -19,6 +20,7 @@ function AddRecipePage() {
   const [error, setError] = useState('');
   const [manualOpen, setManualOpen] = useState(false);
   const [photoOpen, setPhotoOpen] = useState(false);
+  const [fileOpen, setFileOpen] = useState(false);
 
   const isValidUrl = (() => {
     if (!url) return false;
@@ -99,6 +101,10 @@ function AddRecipePage() {
         Add via Photo
       </Button>
 
+      <Button variant="outline" className="w-full" onClick={() => setFileOpen(true)}>
+        Add via File
+      </Button>
+
       <Card className="bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
         <CardContent>
           <div className="text-sm text-blue-800 dark:text-blue-200">
@@ -114,6 +120,7 @@ function AddRecipePage() {
 
       <AddRecipeManuallyModal open={manualOpen} onClose={() => setManualOpen(false)} />
       <AddRecipeFromPhotoModal open={photoOpen} onClose={() => setPhotoOpen(false)} />
+      <AddRecipeFromFileModal open={fileOpen} onClose={() => setFileOpen(false)} />
     </main>
   );
 }

@@ -1,4 +1,8 @@
-import { addRecipeByUrl as addRecipeByUrlJob, addRecipeByPhoto } from '#/server/jobs/add-recipe';
+import {
+  addRecipeByUrl as addRecipeByUrlJob,
+  addRecipeByPhoto,
+  addRecipeByFile,
+} from '#/server/jobs/add-recipe';
 import { job } from '#/server/jobs/helpers/job';
 import { processIngredients } from '#/server/jobs/add-recipe/processIngredients';
 import { saveRecipe } from '#/server/jobs/add-recipe/saveRecipe';
@@ -7,8 +11,9 @@ import { recipeService } from '#/server/services/recipeService';
 import { createServerFn } from '@tanstack/react-start';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { extname, join } from 'node:path';
 import { z } from 'zod';
+import { createError } from '#/server/utils/createError';
 
 export const fetchRecipes = createServerFn({ method: 'GET' }).handler(() =>
   recipeService.getAllRecipes(),
@@ -75,6 +80,42 @@ export const uploadRecipePhotos = createServerFn({ method: 'POST' })
         await writeFile(filePath, Buffer.from(photo.data, 'base64'));
       }),
     );
+
+    return { uploadId };
+  });
+
+const ALLOWED_FILE_EXTENSIONS = new Set(['.txt', '.html', '.htm', '.pdf']);
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
+
+const uploadRecipeFileInput = z.object({
+  data: z.string().min(1),
+  fileName: z.string().min(1),
+});
+
+const processRecipeFileInput = z.object({ uploadId: z.string().uuid() });
+
+export const processRecipeFile = createServerFn({ method: 'POST' })
+  .inputValidator((input: unknown) => processRecipeFileInput.parse(input))
+  .handler((ctx) => addRecipeByFile(ctx.data.uploadId));
+
+export const uploadRecipeFile = createServerFn({ method: 'POST' })
+  .inputValidator((input: unknown) => uploadRecipeFileInput.parse(input))
+  .handler(async (ctx) => {
+    const { data, fileName } = ctx.data;
+    const ext = extname(fileName).toLowerCase();
+    if (!ALLOWED_FILE_EXTENSIONS.has(ext)) {
+      throw createError({ statusCode: 400, statusMessage: `Unsupported file type: ${ext}` });
+    }
+
+    const buffer = Buffer.from(data, 'base64');
+    if (buffer.byteLength > MAX_FILE_SIZE_BYTES) {
+      throw createError({ statusCode: 400, statusMessage: 'File is too large (max 10MB)' });
+    }
+
+    const uploadId = crypto.randomUUID();
+    const dir = join(tmpdir(), 'heirloom-files', uploadId);
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, fileName), buffer);
 
     return { uploadId };
   });

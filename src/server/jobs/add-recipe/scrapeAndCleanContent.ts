@@ -1,17 +1,7 @@
 import * as cheerio from 'cheerio';
 import { createError } from '#/server/utils/createError';
 
-export async function scrapeAndCleanContent(url: string): Promise<string> {
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw createError({
-      statusCode: response.status,
-      statusMessage: `Failed to fetch URL: ${response.statusText}`,
-    });
-  }
-
-  const html = await response.text();
+export function cleanHtmlContent(html: string): string {
   const $ = cheerio.load(html);
 
   $('script, style, nav, header, footer, aside, .advertisement, .ads, .social-share').remove();
@@ -54,4 +44,18 @@ export async function scrapeAndCleanContent(url: string): Promise<string> {
     .trim();
 
   return cleanedContent;
+}
+
+export async function scrapeAndCleanContent(url: string): Promise<string> {
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw createError({
+      statusCode: response.status,
+      statusMessage: `Failed to fetch URL: ${response.statusText}`,
+    });
+  }
+
+  const html = await response.text();
+  return cleanHtmlContent(html);
 }

@@ -2,6 +2,7 @@ import type { JobEventEmitter } from '#/server/jobs/helpers/jobContext';
 import { job } from '#/server/jobs/helpers/job';
 import { step } from '#/server/jobs/helpers/step';
 import { compressPhotos } from '#/server/jobs/add-recipe/compressPhotos';
+import { extractFileContent } from '#/server/jobs/add-recipe/extractFileContent';
 import type { MappedIngredientGroup } from '#/server/jobs/add-recipe/processIngredients';
 import { processIngredients } from '#/server/jobs/add-recipe/processIngredients';
 import { saveRecipe } from '#/server/jobs/add-recipe/saveRecipe';
@@ -51,6 +52,32 @@ export async function addRecipeByPhoto(
     async () => {
       const compressedDir = await step('compress-photos', compressPhotos, uploadId);
       const { recipe } = await step('extract-recipe', extractRecipeFromPhotos, compressedDir);
+
+      const mappedIngredientGroups = await processIngredients(recipe);
+      const { ingredients: _, ...restOfRecipe } = recipe;
+
+      const mappedRecipe: RecipeDataWithMappedIngredients = {
+        ...restOfRecipe,
+        ingredients: mappedIngredientGroups,
+      };
+
+      return saveRecipe(mappedRecipe, '');
+    },
+    onEvent,
+  );
+
+  return result.result;
+}
+
+export async function addRecipeByFile(
+  uploadId: string,
+  onEvent?: JobEventEmitter,
+): Promise<{ id: number }> {
+  const result = await job(
+    'add-recipe-file',
+    async () => {
+      const content = await step('extract-file-content', extractFileContent, uploadId);
+      const { recipe } = await step('extract-recipe', extractRecipe, content);
 
       const mappedIngredientGroups = await processIngredients(recipe);
       const { ingredients: _, ...restOfRecipe } = recipe;
