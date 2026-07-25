@@ -39,7 +39,8 @@ function AddRecipePage() {
       await navigate({ to: '/recipes/$id', params: { id: String(result.id) } });
     } catch (err) {
       console.error('Error adding recipe:', err);
-      setError('Failed to add recipe. Please check the URL and try again.');
+      const message = err instanceof Error ? err.message : 'Please check the URL and try again.';
+      setError(`Failed to add recipe. ${message}`);
     } finally {
       setIsLoading(false);
     }
