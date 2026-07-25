@@ -35,8 +35,8 @@ export function RecipeTopNav({ recipe }: { recipe: RecipeDetail }) {
     }
   };
 
-  const handleCopyLink = () => {
-    void navigator.clipboard.writeText(recipe.sourceUrl);
+  const handleOpenLink = () => {
+    window.open(recipe.sourceUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -66,10 +66,10 @@ export function RecipeTopNav({ recipe }: { recipe: RecipeDetail }) {
             <>
               {recipe.sourceUrl && (
                 <Button
-                  variant="ghost"
+                  variant="secondary"
                   size="icon"
-                  aria-label="Copy link to recipe"
-                  onClick={handleCopyLink}
+                  aria-label="Open recipe source link"
+                  onClick={handleOpenLink}
                 >
                   <Link2 size={16} />
                 </Button>
