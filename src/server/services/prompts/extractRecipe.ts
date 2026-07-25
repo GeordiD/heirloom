@@ -5,7 +5,7 @@ import { createError } from '#/server/utils/createError';
 
 export const RECIPE_EXTRACTION_GUIDELINES = `Guidelines:
 - Extract ingredients as individual items, preserving quantities and descriptions
-- Copy instructions verbatim, exactly as written — do not paraphrase, summarize, or reword
+- Extract instructions as numbered steps in order
 - Include timing information if present
 - Be precise and don't add information not in the content
 - If information is not available, omit that field
