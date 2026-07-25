@@ -20,7 +20,7 @@
     "prepare": "vp config"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^3.0.64",
+    "@ai-sdk/anthropic": "^4.0.20",
     "@serwist/window": "^9.5.7",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
@@ -31,7 +31,7 @@
     "@tanstack/react-router-ssr-query": "latest",
     "@tanstack/react-start": "latest",
     "@tanstack/router-plugin": "^1.132.0",
-    "ai": "^6.0.141",
+    "ai": "^7.0.37",
     "cheerio": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

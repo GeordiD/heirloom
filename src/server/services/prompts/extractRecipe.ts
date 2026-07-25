@@ -20,11 +20,8 @@ ${content}
 
   try {
     const result = await llmService.generateObject({
-      model: llmService.anthropic('claude-sonnet-4-20250514'),
       schema: recipeSchema,
       prompt,
-      temperature: 0.1,
-      maxRetries: 3,
     });
 
     return { recipe: result.object };

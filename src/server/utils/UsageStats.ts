@@ -60,15 +60,8 @@ export class UsageStats implements UsageStatsData {
     const inputTokens = result.usage.inputTokens ?? 0;
     const outputTokens = result.usage.outputTokens ?? 0;
     const totalTokens = result.usage.totalTokens ?? 0;
-    const cacheReadInputTokens = result.usage.cachedInputTokens ?? 0;
-
-    const anthropicMetadata = result.providerMetadata?.anthropic as
-      | { cacheCreationInputTokens?: number }
-      | undefined;
-    const cacheCreationInputTokens =
-      typeof anthropicMetadata?.cacheCreationInputTokens === 'number'
-        ? anthropicMetadata.cacheCreationInputTokens
-        : 0;
+    const cacheReadInputTokens = result.usage.inputTokenDetails.cacheReadTokens ?? 0;
+    const cacheCreationInputTokens = result.usage.inputTokenDetails.cacheWriteTokens ?? 0;
 
     // Claude Sonnet 4 pricing: $3/M input, $15/M output, $3.75/M cache write, $0.30/M cache read
     const inputCost = (inputTokens / 1_000_000) * 3;
