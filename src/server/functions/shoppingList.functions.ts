@@ -58,3 +58,10 @@ export const updateShoppingListItem = createServerFn({ method: 'POST' })
   .handler((ctx) =>
     shoppingListService.updateItem(ctx.data.id, USER_ID, { checked: ctx.data.checked }),
   );
+
+export const addShoppingListItem = createServerFn({ method: 'POST' })
+  .inputValidator((input: { ingredientText: string }) => input)
+  .handler(async (ctx) => {
+    const mealPlan = await mealPlanService.getMealPlan();
+    return shoppingListService.addManualItem(USER_ID, mealPlan.id, ctx.data.ingredientText);
+  });

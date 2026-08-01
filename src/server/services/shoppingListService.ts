@@ -1,7 +1,7 @@
-import { eq } from 'drizzle-orm';
 import { getDb } from '#/server/db';
-import { createError } from '#/server/utils/createError';
 import { mealPlans, shoppingListItems } from '#/server/db/schema';
+import { createError } from '#/server/utils/createError';
+import { eq } from 'drizzle-orm';
 
 export type ShoppingListItem = {
   id: number;
@@ -72,6 +72,61 @@ class ShoppingListService {
       checked: item.checked,
       sortOrder: item.sortOrder,
     }));
+  }
+
+  async addManualItem(
+    userId: number,
+    mealPlanId: number,
+    ingredientText: string,
+  ): Promise<ShoppingListItem> {
+    const db = await getDb();
+
+    const mealPlan = await db.query.mealPlans.findFirst({
+      where: eq(mealPlans.id, mealPlanId),
+    });
+
+    if (!mealPlan) {
+      throw createError({ statusCode: 404, message: 'Meal plan not found' });
+    }
+
+    if (mealPlan.userId !== userId) {
+      throw createError({
+        statusCode: 403,
+        message: 'Not authorized to modify this shopping list',
+      });
+    }
+
+    const lastItem = await db.query.shoppingListItems.findFirst({
+      where: eq(shoppingListItems.mealPlanId, mealPlanId),
+      orderBy: (i, { desc }) => [desc(i.sortOrder)],
+    });
+
+    const [inserted] = await db
+      .insert(shoppingListItems)
+      .values({
+        mealPlanId,
+        recipeId: null,
+        mealId: null,
+        ingredientText,
+        sortOrder: (lastItem?.sortOrder ?? -1) + 1,
+        checked: false,
+      })
+      .returning();
+
+    if (!inserted) {
+      throw createError({ statusCode: 500, message: 'Failed to add item' });
+    }
+
+    return {
+      id: inserted.id,
+      recipeId: null,
+      recipeName: null,
+      mealId: null,
+      mealCustomText: null,
+      ingredientText: inserted.ingredientText,
+      checked: inserted.checked,
+      sortOrder: inserted.sortOrder,
+    };
   }
 
   async getActiveList(userId: number): Promise<ShoppingList | null> {

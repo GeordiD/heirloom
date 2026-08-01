@@ -1,11 +1,15 @@
+import { AddShoppingListItemModal } from '#/components/shopping-list/AddShoppingListItemModal';
 import { Button } from '#/components/ui/button';
 import {
+  addShoppingListItem,
   fetchShoppingList,
   updateShoppingListItem,
 } from '#/server/functions/shoppingList.functions';
 import type { ShoppingList } from '#/server/services/shoppingListService';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
+import { Plus } from 'lucide-react';
+import { useState } from 'react';
 
 const shoppingListQueryOptions = {
   queryKey: ['shopping-list'] as const,
@@ -20,6 +24,12 @@ export const Route = createFileRoute('/_footer/list/')({
 function ShoppingListPage() {
   const queryClient = useQueryClient();
   const { data: shoppingList, isPending, error } = useQuery(shoppingListQueryOptions);
+  const [isAddOpen, setIsAddOpen] = useState(false);
+
+  const addMutation = useMutation({
+    mutationFn: (ingredientText: string) => addShoppingListItem({ data: { ingredientText } }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['shopping-list'] }),
+  });
 
   const toggleMutation = useMutation({
     mutationFn: (vars: { id: number; checked: boolean }) => updateShoppingListItem({ data: vars }),
@@ -49,8 +59,16 @@ function ShoppingListPage() {
   return (
     <>
       <div className="flex flex-col max-w-[414px] mx-auto">
-        <header className="sticky top-0 z-10 bg-background border-b border-border px-4 py-4">
+        <header className="sticky top-0 z-10 bg-background border-b border-border px-4 py-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold text-foreground">Shopping List</h1>
+          <Button
+            variant="secondary"
+            size="icon"
+            aria-label="Add item"
+            onClick={() => setIsAddOpen(true)}
+          >
+            <Plus size={20} />
+          </Button>
         </header>
 
         <main className="flex-1 overflow-y-auto px-4 py-4">
@@ -118,6 +136,14 @@ function ShoppingListPage() {
           )}
         </main>
       </div>
+
+      <AddShoppingListItemModal
+        open={isAddOpen}
+        onClose={() => setIsAddOpen(false)}
+        onAdd={async (ingredientText) => {
+          await addMutation.mutateAsync(ingredientText);
+        }}
+      />
     </>
   );
 }
