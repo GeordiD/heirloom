@@ -1,7 +1,7 @@
 import { getDb } from '#/server/db';
 import { mealPlans, shoppingListItems } from '#/server/db/schema';
 import { createError } from '#/server/utils/createError';
-import { eq } from 'drizzle-orm';
+import { and, eq, isNull } from 'drizzle-orm';
 
 export type ShoppingListItem = {
   id: number;
@@ -97,7 +97,7 @@ class ShoppingListService {
     }
 
     const lastItem = await db.query.shoppingListItems.findFirst({
-      where: eq(shoppingListItems.mealPlanId, mealPlanId),
+      where: and(eq(shoppingListItems.mealPlanId, mealPlanId), isNull(shoppingListItems.deletedAt)),
       orderBy: (i, { desc }) => [desc(i.sortOrder)],
     });
 
@@ -139,7 +139,10 @@ class ShoppingListService {
     if (!mealPlan) return null;
 
     const items = await db.query.shoppingListItems.findMany({
-      where: eq(shoppingListItems.mealPlanId, mealPlan.id),
+      where: and(
+        eq(shoppingListItems.mealPlanId, mealPlan.id),
+        isNull(shoppingListItems.deletedAt),
+      ),
       with: { recipe: true, meal: true },
       orderBy: (i, { asc }) => [asc(i.sortOrder)],
     });
@@ -206,6 +209,28 @@ class ShoppingListService {
       checked: updatedItem.checked,
       sortOrder: updatedItem.sortOrder,
     };
+  }
+
+  async deleteItem(itemId: number, userId: number): Promise<void> {
+    const db = await getDb();
+
+    const item = await db.query.shoppingListItems.findFirst({
+      where: eq(shoppingListItems.id, itemId),
+      with: { mealPlan: true },
+    });
+
+    if (!item) {
+      throw createError({ statusCode: 404, message: 'Shopping list item not found' });
+    }
+
+    if (item.mealPlan.userId !== userId) {
+      throw createError({ statusCode: 403, message: 'Not authorized to delete this item' });
+    }
+
+    await db
+      .update(shoppingListItems)
+      .set({ deletedAt: new Date() })
+      .where(eq(shoppingListItems.id, itemId));
   }
 
   async clearList(userId: number, mealPlanId: number): Promise<void> {

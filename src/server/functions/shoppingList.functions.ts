@@ -65,3 +65,7 @@ export const addShoppingListItem = createServerFn({ method: 'POST' })
     const mealPlan = await mealPlanService.getMealPlan();
     return shoppingListService.addManualItem(USER_ID, mealPlan.id, ctx.data.ingredientText);
   });
+
+export const deleteShoppingListItem = createServerFn({ method: 'POST' })
+  .inputValidator((input: { id: number }) => input)
+  .handler((ctx) => shoppingListService.deleteItem(ctx.data.id, USER_ID));
