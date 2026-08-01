@@ -1,6 +1,6 @@
-import { and, eq } from 'drizzle-orm';
 import { getDb } from '#/server/db';
 import { mealPlanDays, mealPlanMeals, mealPlans } from '#/server/db/schema';
+import { and, eq } from 'drizzle-orm';
 
 export type MealType = 'lunch' | 'dinner';
 export type DayOfWeek =
@@ -45,13 +45,13 @@ const daysOfWeek: DayOfWeek[] = [
 ];
 
 const daysMap: Record<DayOfWeek, number> = {
-  sunday: 0,
-  monday: 1,
-  tuesday: 2,
-  wednesday: 3,
-  thursday: 4,
-  friday: 5,
-  saturday: 6,
+  monday: 0,
+  tuesday: 1,
+  wednesday: 2,
+  thursday: 3,
+  friday: 4,
+  saturday: 5,
+  sunday: 6,
 };
 
 class MealPlanService {
@@ -82,29 +82,31 @@ class MealPlanService {
     return {
       id: mealPlan.id,
       weekStartDay: mealPlan.weekStartDay as DayOfWeek,
-      days: mealPlan.days.map((day) => ({
-        id: day.id,
-        dayOfWeek: day.dayOfWeek as DayOfWeek,
-        date: day.date,
-        lunch: day.meals
-          .filter((m) => m.mealType === 'lunch')
-          .map((m) => ({
-            id: m.id,
-            recipeId: m.recipeId,
-            recipeName: m.recipe?.name ?? null,
-            customText: m.customText,
-            sortOrder: m.sortOrder,
-          })),
-        dinner: day.meals
-          .filter((m) => m.mealType === 'dinner')
-          .map((m) => ({
-            id: m.id,
-            recipeId: m.recipeId,
-            recipeName: m.recipe?.name ?? null,
-            customText: m.customText,
-            sortOrder: m.sortOrder,
-          })),
-      })),
+      days: mealPlan.days
+        .sort((a, b) => (daysMap[a.dayOfWeek] > daysMap[b.dayOfWeek] ? 1 : -1))
+        .map((day) => ({
+          id: day.id,
+          dayOfWeek: day.dayOfWeek as DayOfWeek,
+          date: day.date,
+          lunch: day.meals
+            .filter((m) => m.mealType === 'lunch')
+            .map((m) => ({
+              id: m.id,
+              recipeId: m.recipeId,
+              recipeName: m.recipe?.name ?? null,
+              customText: m.customText,
+              sortOrder: m.sortOrder,
+            })),
+          dinner: day.meals
+            .filter((m) => m.mealType === 'dinner')
+            .map((m) => ({
+              id: m.id,
+              recipeId: m.recipeId,
+              recipeName: m.recipe?.name ?? null,
+              customText: m.customText,
+              sortOrder: m.sortOrder,
+            })),
+        })),
     };
   }
 
