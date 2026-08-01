@@ -96,9 +96,9 @@ class ShoppingListService {
       });
     }
 
-    const lastItem = await db.query.shoppingListItems.findFirst({
+    const firstItem = await db.query.shoppingListItems.findFirst({
       where: and(eq(shoppingListItems.mealPlanId, mealPlanId), isNull(shoppingListItems.deletedAt)),
-      orderBy: (i, { desc }) => [desc(i.sortOrder)],
+      orderBy: (i, { asc }) => [asc(i.sortOrder)],
     });
 
     const [inserted] = await db
@@ -108,7 +108,7 @@ class ShoppingListService {
         recipeId: null,
         mealId: null,
         ingredientText,
-        sortOrder: (lastItem?.sortOrder ?? -1) + 1,
+        sortOrder: (firstItem?.sortOrder ?? 0) - 1,
         checked: false,
       })
       .returning();
