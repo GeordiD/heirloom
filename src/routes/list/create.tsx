@@ -67,18 +67,30 @@ function CreateShoppingListPage() {
     })),
   );
 
+  const [manualItems, setManualItems] = useState<SelectableIngredient[]>(() =>
+    (data?.manualItems ?? []).map((item) => ({
+      id: item.id,
+      text: item.ingredientText,
+      selected: true,
+    })),
+  );
+
   const [currentStep, setCurrentStep] = useState(0);
   const [additionalIngredientText, setAdditionalIngredientText] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const totalSteps = recipeSteps.length + customMealSteps.length;
+  const hasManualItemsStep = manualItems.length > 0;
+  const totalSteps = recipeSteps.length + customMealSteps.length + (hasManualItemsStep ? 1 : 0);
   const isFirstStep = currentStep === 0;
   const isLastStep = currentStep === totalSteps - 1;
   const isRecipeStep = currentStep < recipeSteps.length;
+  const isCustomMealStep =
+    !isRecipeStep && currentStep < recipeSteps.length + customMealSteps.length;
   const currentRecipe = isRecipeStep ? recipeSteps[currentStep] : null;
-  const currentCustomMeal = !isRecipeStep
+  const currentCustomMeal = isCustomMealStep
     ? customMealSteps[currentStep - recipeSteps.length]
     : null;
+  const isManualItemsStep = hasManualItemsStep && !isRecipeStep && !isCustomMealStep;
 
   function goBack() {
     if (!isFirstStep) {
@@ -250,6 +262,13 @@ function CreateShoppingListPage() {
     );
   }
 
+  // Manual (carried-over) item actions
+  function toggleManualItem(itemId: number) {
+    setManualItems((items) =>
+      items.map((item) => (item.id === itemId ? { ...item, selected: !item.selected } : item)),
+    );
+  }
+
   async function finish() {
     if (!data) return;
     setSubmitting(true);
@@ -279,6 +298,12 @@ function CreateShoppingListPage() {
           if (ing.selected && ing.text.trim()) {
             items.push({ recipeId: null, mealId: step.mealId, ingredientText: ing.text });
           }
+        }
+      }
+
+      for (const item of manualItems) {
+        if (item.selected && item.text.trim()) {
+          items.push({ recipeId: null, mealId: null, ingredientText: item.text });
         }
       }
 
@@ -446,6 +471,36 @@ function CreateShoppingListPage() {
                   </div>
                 ))
               )}
+            </div>
+          </div>
+        ) : isManualItemsStep ? (
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <h2 className="text-2xl font-bold text-foreground">Previous Items</h2>
+              <p className="text-muted-foreground">
+                These items manually added to your last list that are still unchecked. Unselect any
+                you don&apos;t want to carry over to this list.
+              </p>
+            </div>
+
+            <div className="text-sm text-muted-foreground">
+              Step {currentStep + 1} of {totalSteps}
+            </div>
+
+            <div className="space-y-3">
+              {manualItems.map((item) => (
+                <div key={item.id} className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    checked={item.selected}
+                    onChange={() => toggleManualItem(item.id)}
+                    className="mt-2.5 h-4 w-4 rounded border-border accent-primary cursor-pointer"
+                  />
+                  <div className="flex-1">
+                    <Input value={item.text} readOnly />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         ) : null}

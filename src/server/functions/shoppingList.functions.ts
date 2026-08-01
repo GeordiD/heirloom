@@ -41,7 +41,9 @@ export const fetchShoppingListCreationData = createServerFn({ method: 'GET' }).h
       ),
     }));
 
-  return { mealPlanId: mealPlan.id, recipes, customMeals };
+  const manualItems = await shoppingListService.getUncheckedManualItems(USER_ID, mealPlan.id);
+
+  return { mealPlanId: mealPlan.id, recipes, customMeals, manualItems };
 });
 
 export const addShoppingListItems = createServerFn({ method: 'POST' })

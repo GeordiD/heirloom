@@ -3,6 +3,11 @@ import { mealPlans, shoppingListItems } from '#/server/db/schema';
 import { createError } from '#/server/utils/createError';
 import { and, eq, isNull } from 'drizzle-orm';
 
+export type CarryoverManualItem = {
+  id: number;
+  ingredientText: string;
+};
+
 export type ShoppingListItem = {
   id: number;
   recipeId: number | null;
@@ -50,7 +55,7 @@ class ShoppingListService {
       recipeId: item.recipeId,
       mealId: item.mealId,
       ingredientText: item.ingredientText,
-      sortOrder: sortOrder++,
+      sortOrder: item.recipeId === null && item.mealId === null ? -1 : sortOrder++,
       checked: false,
     }));
 
@@ -59,7 +64,7 @@ class ShoppingListService {
     const result = await db.query.shoppingListItems.findMany({
       where: eq(shoppingListItems.mealPlanId, mealPlanId),
       with: { recipe: true, meal: true },
-      orderBy: (i, { asc }) => [asc(i.sortOrder)],
+      orderBy: (i, { asc }) => [asc(i.sortOrder), asc(i.ingredientText)],
     });
 
     return result.map((item) => ({
@@ -96,11 +101,6 @@ class ShoppingListService {
       });
     }
 
-    const firstItem = await db.query.shoppingListItems.findFirst({
-      where: and(eq(shoppingListItems.mealPlanId, mealPlanId), isNull(shoppingListItems.deletedAt)),
-      orderBy: (i, { asc }) => [asc(i.sortOrder)],
-    });
-
     const [inserted] = await db
       .insert(shoppingListItems)
       .values({
@@ -108,7 +108,7 @@ class ShoppingListService {
         recipeId: null,
         mealId: null,
         ingredientText,
-        sortOrder: (firstItem?.sortOrder ?? 0) - 1,
+        sortOrder: -1,
         checked: false,
       })
       .returning();
@@ -129,6 +129,41 @@ class ShoppingListService {
     };
   }
 
+  async getUncheckedManualItems(
+    userId: number,
+    mealPlanId: number,
+  ): Promise<CarryoverManualItem[]> {
+    const db = await getDb();
+
+    const mealPlan = await db.query.mealPlans.findFirst({
+      where: eq(mealPlans.id, mealPlanId),
+    });
+
+    if (!mealPlan) {
+      throw createError({ statusCode: 404, message: 'Meal plan not found' });
+    }
+
+    if (mealPlan.userId !== userId) {
+      throw createError({
+        statusCode: 403,
+        message: 'Not authorized to view this shopping list',
+      });
+    }
+
+    const items = await db.query.shoppingListItems.findMany({
+      where: and(
+        eq(shoppingListItems.mealPlanId, mealPlanId),
+        isNull(shoppingListItems.recipeId),
+        isNull(shoppingListItems.mealId),
+        isNull(shoppingListItems.deletedAt),
+        eq(shoppingListItems.checked, false),
+      ),
+      orderBy: (i, { asc }) => [asc(i.sortOrder)],
+    });
+
+    return items.map((item) => ({ id: item.id, ingredientText: item.ingredientText }));
+  }
+
   async getActiveList(userId: number): Promise<ShoppingList | null> {
     const db = await getDb();
 
@@ -144,7 +179,7 @@ class ShoppingListService {
         isNull(shoppingListItems.deletedAt),
       ),
       with: { recipe: true, meal: true },
-      orderBy: (i, { asc }) => [asc(i.sortOrder)],
+      orderBy: (i, { asc }) => [asc(i.sortOrder), asc(i.ingredientText)],
     });
 
     if (items.length === 0) return null;
